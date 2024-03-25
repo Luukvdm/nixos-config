@@ -19,6 +19,17 @@
     ./hardware-configuration.nix
   ];
 
+  sops = {
+    defaultSopsFile = hostSecretsDir + /secrets.yaml;
+    defaultSopsFormat = "yaml";
+
+    age = {
+      sshKeyPaths = ["/home/${config.myNixOS.userName}/.ssh/nixos/id_ed25519"];
+      keyFile = "/home/${config.myNixOS.userName}/.config/nixos/age/keys.txt";
+      generateKey = true;
+    };
+  };
+
   myNixOS = {
     bundles.general-desktop.enable = true;
     bundles.gnome-desktop.enable = true;

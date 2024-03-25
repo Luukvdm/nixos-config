@@ -1,0 +1,13 @@
+keys:
+- &thinkpad age17sv6eash2cv2ljt57pzg5gua74zr9lks3nyggsp32n628malj96surg2h3
+- &work age1s2wumhh0hcsgvppfx0awla06rsycvgassyqt0ynajtagmmmjfshstfausp
+creation_rules:
+- path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+  key_groups:
+  - age:
+    - *thinkpad
+    - *work
+- path_regex: secrets/sue/[^/]+\.(yaml|json|env|ini)$
+  key_groups:
+  - age:
+    - *work
