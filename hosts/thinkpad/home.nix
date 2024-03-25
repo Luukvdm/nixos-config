@@ -31,25 +31,31 @@ in {
   myHomeManager = {
     bundles.general.enable = true;
     bundles.gnome-desktop.enable = true;
-    go.enable = true;
+    firefox.enable = true;
     git = {
       enable = true;
+      mainUserFile = config.sops.secrets.githubUser.path;
     };
+    go.enable = true;
     nix-direnv.enable = true;
+    tilix.enable = true;
+    vscode.enable = true;
     xdg.enable = true;
   };
 
   # colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;
 
   home = {
-    username = "pengu";
-    homeDirectory = lib.mkDefault "/home/pengu";
+    username = username;
+    homeDirectory = lib.mkDefault "/home/${username}";
     stateVersion = "24.05";
+    # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
+    activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
+      /run/current-system/sw/bin/systemctl start --user sops-nix
+    '';
 
     packages = with pkgs; [
       insomnia
-      glab
-      awscli2
     ];
   };
 }

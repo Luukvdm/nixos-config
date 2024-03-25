@@ -1,5 +1,3 @@
-# This is your system's configuration file.
-# Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
   inputs,
   outputs,
@@ -49,47 +47,6 @@
     # };
   };
 
-  # extra packages
-  environment.systemPackages = with pkgs; [
-    neovim
-    nix-index
-    nixos-generators
-    python3
-    gotop
-    gnumake
-    gcc
-    docker
-    docker-compose
-    kubectl
-    kubectx
-    kustomize
-    kubernetes-helm
-    kind
-    k9s
-    skaffold
-    dapr-cli
-    nodejs
-    yarn
-    electron
-    nodePackages_latest.vue-cli
-    nodePackages_latest.bash-language-server
-    dotnet-sdk
-    dotnet-runtime
-    terraform
-    terraform-ls
-    terraform-lsp
-    terraform-docs
-    jetbrains-toolbox
-    jetbrains.goland
-    jetbrains.rider
-    redocly-cli
-    openapi-generator-cli
-    delve
-    protobuf
-    protobufc
-    spotify
-  ];
-
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
 
@@ -131,6 +88,47 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true;
   virtualisation.docker.autoPrune.enable = true;
+
+  # extra packages
+  environment.systemPackages = with pkgs; [
+    neovim
+    nix-index
+    nixos-generators
+    python3
+    gotop
+    gnumake
+    gcc
+    docker
+    docker-compose
+    kubectl
+    kubectx
+    kustomize
+    kubernetes-helm
+    kind
+    k9s
+    skaffold
+    dapr-cli
+    nodejs
+    yarn
+    electron
+    nodePackages_latest.vue-cli
+    nodePackages_latest.bash-language-server
+    dotnet-sdk
+    dotnet-runtime
+    terraform
+    terraform-ls
+    terraform-lsp
+    terraform-docs
+    jetbrains-toolbox
+    jetbrains.goland
+    jetbrains.rider
+    redocly-cli
+    openapi-generator-cli
+    delve
+    protobuf
+    protobufc
+    spotify
+  ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.05";
