@@ -34,6 +34,7 @@
     inherit (self) outputs;
 
     myLib = import ./myLib/default.nix {inherit inputs;};
+    # hostSecretsDir = self + "/secrets";
 
     systems = [
       "x86_64-linux"
@@ -74,6 +75,7 @@
 
         specialArgs = {
           inherit inputs outputs myLib;
+          hostSecretsDir = self + "/secrets";
         };
         modules = [
           ./hosts/thinkpad/configuration.nix

@@ -5,7 +5,9 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  username = "pengu";
+in {
   imports = [outputs.homeManagerModules.default];
 
   sops = {

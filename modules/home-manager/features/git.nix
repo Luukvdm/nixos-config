@@ -16,11 +16,13 @@ in {
     };
     sueUserFile = lib.mkOption {
       type = with lib.types; either str path;
+      default = "";
       description = ''
         git config for the sue user
       '';
     };
   };
+
   programs.git = {
     enable = true;
     aliases = {
@@ -32,11 +34,10 @@ in {
         contentSuffix = "gituser";
         path = cfg.mainUserFile;
       }
-      {
+    ] ++ lib.lists.optional (cfg.sueUserFile != "") {
         condition = "gitdir:${homeCfg.homeDirectory}/code/sue/";
         path = cfg.sueUserFile;
-      }
-    ];
+      };
     extraConfig = {
       core.editor = "nvim";
       diff.tool = "vimdiff";

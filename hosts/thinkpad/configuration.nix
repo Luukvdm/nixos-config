@@ -6,6 +6,7 @@
   lib,
   config,
   pkgs,
+  hostSecretsDir,
   ...
 }: {
   imports = [
@@ -15,17 +16,18 @@
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
+    inputs.sops-nix.nixosModules.sops
 
     ./hardware-configuration.nix
   ];
 
   sops = {
-    defaultSopsFile = hostSecretsDir + /secrets.yaml;
+    # defaultSopsFile = hostSecretsDir + /secrets.yaml;
     defaultSopsFormat = "yaml";
 
     age = {
       sshKeyPaths = ["/home/${config.myNixOS.userName}/.ssh/nixos/id_ed25519"];
-      keyFile = "/home/${config.myNixOS.userName}/.config/nixos/age/keys.txt";
+      keyFile = "/home/${config.myNixOS.userName}/.config/sops/age/keys.txt";
       generateKey = true;
     };
   };
