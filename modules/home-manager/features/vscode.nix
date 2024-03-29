@@ -4,6 +4,10 @@
   lib,
   ...
 }: {
+  home.packages = with pkgs; [
+    alejandra
+  ];
+
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;

@@ -3,7 +3,19 @@
   config,
   lib,
   ...
-}: {
+}: let
+  cfg = config.myHomeManager.go;
+in {
+  options.myHomeManager.go = {
+    includeGoland = lib.mkOption {
+      type = with lib.types; bool;
+      default = false;
+      description = ''
+        Wether to include Jetbrains Goland.
+      '';
+    };
+  };
+
   programs.go = {
     enable = true;
     package = pkgs.go_1_22;
@@ -18,4 +30,13 @@
     #  "mvn.cc/gofumpt" = builtins.fetchGit "https://github.com/mvdan/gofumpt";
     # };
   };
+
+  home.packages = with pkgs;
+    [
+      delve
+    ]
+    ++ lib.optionals cfg.includeGoland [
+      jetbrains-toolbox
+      jetbrains.goland
+    ];
 }

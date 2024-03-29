@@ -4,48 +4,30 @@
   lib,
   config,
   pkgs,
-  hostSecretsDir,
   ...
 }: {
   imports = [
     outputs.nixosModules.default
 
     inputs.nixos-hardware.nixosModules.framework-13-7040-amd
-    inputs.sops-nix.nixosModules.sops
 
     ./hardware-configuration.nix
   ];
-
-  sops = {
-    # This will add secrets.yml to the nix store
-    # You can avoid this by adding a string to the full path instead, i.e.
-    # sops.defaultSopsFile = "/root/.sops/secrets/example.yaml";
-    # defaultSopsFile = ./secrets/example.yaml;
-    defaultSopsFile = hostSecretsDir + /secrets.yaml;
-    defaultSopsFormat = "yaml";
-
-    # secrets = {
-    #   githubUserFile = {
-    #     sopsFile = ../../secrets/github.ini;
-    #     format = "ini";
-    #     owner = config.myNixOS.userName;
-    #   };
-    # };
-
-    age = {
-      sshKeyPaths = ["/home/${config.myNixOS.userName}/.ssh/sops/id_ed25519"];
-      keyFile = "/home/${config.myNixOS.userName}/.config/sops/age/keys.txt";
-      generateKey = true;
-    };
-  };
 
   myNixOS = {
     bundles.general-desktop.enable = true;
     bundles.gnome-desktop.enable = true;
     bundles.home-manager.enable = true;
     power-management.enable = false;
+    sops = {
+      enable = true;
+      sshKeyDir = "sops";
+    };
     gchat.enable = true;
     gnome.enable = true;
+    docker.enable = true;
+    k8s-tools.enable = true;
+    terraform.enable = true;
 
     userName = "pengu";
     userConfig = ./home.nix;
@@ -97,33 +79,10 @@
     gotop
     gnumake
     gcc
-    docker
-    docker-compose
-    kubectl
-    kubectx
-    kustomize
-    kubernetes-helm
-    kind
-    k9s
     skaffold
     dapr-cli
-    nodejs
-    yarn
-    electron
-    nodePackages_latest.vue-cli
-    nodePackages_latest.bash-language-server
-    dotnet-sdk
-    dotnet-runtime
-    terraform
-    terraform-ls
-    terraform-lsp
-    terraform-docs
-    jetbrains-toolbox
-    jetbrains.goland
-    jetbrains.rider
     redocly-cli
     openapi-generator-cli
-    delve
     protobuf
     protobufc
     spotify

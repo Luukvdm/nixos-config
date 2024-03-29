@@ -23,18 +23,28 @@ in {
     };
   };
 
+  home.shellAliases = {
+    g = "git";
+    gc = "git commit";
+    gco = "git checkout";
+    gs = "git status -sb";
+    delete-merged = "git branch --merged | grep -v \* | xargs git branch -D";
+  };
+
   programs.git = {
     enable = true;
     aliases = {
       mr = "!sh -c 'git fetch $1 merge-requests/$2/head:mr-$1-$2 && git checkout mr-$1-$2' -";
       cob = "checkout -b ";
     };
-    includes = [
-      {
-        contentSuffix = "gituser";
-        path = cfg.mainUserFile;
-      }
-    ] ++ lib.lists.optional (cfg.sueUserFile != "") {
+    includes =
+      [
+        {
+          contentSuffix = "gituser";
+          path = cfg.mainUserFile;
+        }
+      ]
+      ++ lib.lists.optional (cfg.sueUserFile != "") {
         condition = "gitdir:${homeCfg.homeDirectory}/code/sue/";
         path = cfg.sueUserFile;
       };

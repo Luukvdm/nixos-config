@@ -4,7 +4,6 @@
   lib,
   config,
   pkgs,
-  hostSecretsDir,
   ...
 }: {
   imports = [
@@ -14,29 +13,22 @@
     # inputs.hardware.nixosModules.common-cpu-amd
     # inputs.hardware.nixosModules.common-ssd
     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t495
-    inputs.sops-nix.nixosModules.sops
 
     ./hardware-configuration.nix
   ];
-
-  sops = {
-    # defaultSopsFile = hostSecretsDir + /secrets.yaml;
-    defaultSopsFormat = "yaml";
-
-    age = {
-      sshKeyPaths = ["/home/${config.myNixOS.userName}/.ssh/nixos/id_ed25519"];
-      keyFile = "/home/${config.myNixOS.userName}/.config/sops/age/keys.txt";
-      generateKey = true;
-    };
-  };
 
   myNixOS = {
     bundles.general-desktop.enable = true;
     bundles.gnome-desktop.enable = true;
     bundles.home-manager.enable = true;
     power-management.enable = false;
+    sops.enable = true;
     gchat.enable = true;
     gnome.enable = true;
+    docker.enable = true;
+    k8s-tools = {
+      enable = true;
+    };
 
     # sharedSettings.hyprland.enable = false;
     userName = "pengu";
@@ -85,10 +77,6 @@
     #media-session.enable = true;
   };
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.enableOnBoot = true;
-  virtualisation.docker.autoPrune.enable = true;
-
   # extra packages
   environment.systemPackages = with pkgs; [
     neovim
@@ -98,33 +86,11 @@
     gotop
     gnumake
     gcc
-    docker
-    docker-compose
-    kubectl
-    kubectx
-    kustomize
-    kubernetes-helm
-    kind
-    k9s
     skaffold
     dapr-cli
-    nodejs
-    yarn
-    electron
-    nodePackages_latest.vue-cli
     nodePackages_latest.bash-language-server
-    dotnet-sdk
-    dotnet-runtime
-    terraform
-    terraform-ls
-    terraform-lsp
-    terraform-docs
-    jetbrains-toolbox
-    jetbrains.goland
-    jetbrains.rider
     redocly-cli
     openapi-generator-cli
-    delve
     protobuf
     protobufc
     spotify

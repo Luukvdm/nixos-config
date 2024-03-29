@@ -76,7 +76,6 @@
       du = "du -ch";
       ipp = "curl ipinfo.io/ip";
       ip = "ip -c";
-      aliases = "$EDITOR ~/.config/shell/aliasrc";
       cp = "cp -iv";
       mv = "mv -iv";
       srm = "rm -vI";
@@ -84,25 +83,12 @@
       grep = "grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}";
       f = "$FILE";
       e = "$EDITOR";
-      service = "systemctl";
-      userctl = "systemctl --user";
+      service = "${pkgs.systemd}/bin/systemctl";
+      userctl = "${pkgs.systemd}/bin/systemctl --user";
       restart = "service restart";
-      status = "systemctl status";
-      errors = "journalctl -p err..alert --since '24 h ago'";
+      status = "${pkgs.systemd}/bin/systemctl status";
+      errors = "${pkgs.systemd}/bin/journalctl -p err..alert --since '24 h ago'";
       cat = "bat --paging=never";
-      g = "git";
-      gc = "git commit";
-      gco = "git checkout";
-      gs = "git status -sb";
-      delete-merged = "git branch --merged | grep -v \* | xargs git branch -D";
-      docker = "docker ";
-      d = "docker ";
-      dc = "docker-compose ";
-      k = "kubectl ";
-      kcc = "kubectl config current-context";
-      kc = "kubectx ";
-      tf = "terraform ";
-      yarn = "yarn --use-yarnrc '$XDG_CONFIG_HOME/yarn/config'";
     };
   };
 

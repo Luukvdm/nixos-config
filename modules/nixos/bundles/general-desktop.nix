@@ -62,10 +62,6 @@ in {
       # XDG_SESSION_TYPE="wayland";
       # SDL_VIDEODRIVER="wayland";
 
-      DOTNET_CLI_TELEMETRY_OPTOUT = "1";
-
-      TF_CLI_CONFIG_FILE = "$XDG_CONFIG_HOME/terraform/terraformrc";
-
       BASH_COMPLETION_USER_FILE = "$XDG_CONFIG_HOME/bash-completion/bash_completion";
 
       IDEA_PROPERTIES = "$XDG_CONFIG_HOME/intellij-idea/idea.properties";
@@ -86,9 +82,6 @@ in {
       GTK_RC_FILES = "$XDG_CONFIG_HOME/gtk-1.0/gtkrc";
       WGETRC = "$XDG_CONFIG_HOME/wget/wgetrc";
 
-      NUGET_PACKAGES = "$XDG_CACHE_HOME/NuGetPackages";
-      DOTNET_CLI_HOME = "$XDG_CONFIG_HOME/dotnet";
-
       GRADLE_USER_HOME = "$XDG_DATA_HOME/gradle";
       _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java";
       CARGO_HOME = "$XDG_DATA_HOME/cargo";
@@ -96,15 +89,6 @@ in {
       BUNDLE_USER_CONFIG = "$XDG_CONFIG_HOME/bundle";
       BUNDLE_USER_CACHE = "$XDG_CACHE_HOME/bundle";
       BUNDLE_USER_PLUGIN = "$XDG_DATA_HOME/bundle";
-
-      NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
-      NPM_CONFIG_CACHE = "$XDG_CACHE_HOME/npm";
-      NPM_CONFIG_TMP = "$XDG_RUNTIME_DIR/npm";
-      NODE_REPL_HISTORY = "$XDG_DATA_HOME/node_repl_history";
-
-      DOCKER_CONFIG = "$XDG_CONFIG_HOME/docker";
-      MACHINE_STORAGE_PATH = "$XDG_DATA_HOME/docker-machine";
-      MINIKUBE_HOME = "$XDG_DATA_HOME/minikube";
 
       MYSQL_HISTFILE = "$XDG_DATA_HOME/mysql_history";
     };
