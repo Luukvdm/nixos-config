@@ -18,7 +18,7 @@ in {
 
   programs.go = {
     enable = true;
-    package = pkgs.go_1_22;
+    package = pkgs.unstable.go_1_22;
     goPath = ".local/share/go";
     goBin = ".local/share/go/bin";
     goPrivate = ["gitlab.com/suecode"];

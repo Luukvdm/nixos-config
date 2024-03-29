@@ -36,10 +36,34 @@ in {
 
   # colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;
 
+  nixpkgs = {
+    overlays = [
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
+    ];
+    # Configure your nixpkgs instance
+    config = {
+      allowUnfree = true;
+      # Workaround for https://github.com/nix-community/home-manager/issues/2942
+      allowUnfreePredicate = _: true;
+    };
+  };
+
   home = {
     username = username;
     homeDirectory = lib.mkDefault "/home/${username}";
-    stateVersion = "24.05";
+    stateVersion = "23.11";
     # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
     activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
       ${pkgs.systemd}/bin/systemctl start --user sops-nix
@@ -48,7 +72,7 @@ in {
     packages = with pkgs; [
       insomnia
       glab
-      awscli2
+      # awscli2
       # (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
       # google-cloud-sdk-gce
     ];

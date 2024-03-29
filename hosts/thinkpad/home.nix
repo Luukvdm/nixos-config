@@ -34,7 +34,7 @@ in {
   home = {
     username = username;
     homeDirectory = lib.mkDefault "/home/${username}";
-    stateVersion = "24.05";
+    stateVersion = "23.11";
     # https://github.com/Mic92/sops-nix?tab=readme-ov-file#use-with-home-manager
     activation.setupEtc = config.lib.dag.entryAfter ["writeBoundary"] ''
       ${pkgs.systemd}/bin/systemctl start --user sops-nix

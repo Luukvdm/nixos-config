@@ -14,6 +14,29 @@
     ./hardware-configuration.nix
   ];
 
+  nixpkgs = {
+    overlays = [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
+    ];
+    # Configure your nixpkgs instance
+    config = {
+      allowUnfree = true;
+    };
+  };
+
   myNixOS = {
     bundles.general-desktop.enable = true;
     bundles.gnome-desktop.enable = true;
@@ -65,10 +88,6 @@
     #media-session.enable = true;
   };
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.enableOnBoot = true;
-  virtualisation.docker.autoPrune.enable = true;
-
   # extra packages
   # TODO: Move into modules
   environment.systemPackages = with pkgs; [
@@ -81,7 +100,7 @@
     gcc
     skaffold
     dapr-cli
-    redocly-cli
+    # redocly-cli
     openapi-generator-cli
     protobuf
     protobufc
@@ -89,5 +108,5 @@
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "24.05";
+  system.stateVersion = "23.11";
 }
