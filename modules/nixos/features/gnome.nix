@@ -81,17 +81,22 @@ in {
       gdm = {
         enable = true;
         wayland = true;
+        /*
+        autoLogin = {
+          delay = 1;
+        };
         settings = {
           daemon = {
             AutomaticLoginEnable = "True";
             AutomaticLogin = cfg.userName;
           };
         };
+        */
       };
-      # autoLogin = {
-      #   enable = true;
-      #   user = cfg.userName;
-      # };
+      autoLogin = {
+        enable = true;
+        user = cfg.userName;
+      };
     };
     desktopManager.gnome = {
       enable = true;
