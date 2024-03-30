@@ -31,6 +31,7 @@ in {
     nix-direnv.enable = true;
     tilix.enable = true;
     vscode.enable = true;
+    neovim.enable = true;
     xdg.enable = true;
   };
 

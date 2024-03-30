@@ -91,7 +91,6 @@
   # extra packages
   # TODO: Move into modules
   environment.systemPackages = with pkgs; [
-    neovim
     nix-index
     nixos-generators
     python3
