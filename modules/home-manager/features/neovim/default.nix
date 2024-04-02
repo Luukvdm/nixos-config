@@ -21,6 +21,12 @@ in {
     ./keymaps.nix
   ];
 
+  home = {
+    shellAliases = {
+      vim = "nvim ";
+    };
+  };
+
   programs.nixvim = {
     enable = true;
     globals.mapleader = "\\";
