@@ -33,6 +33,9 @@ in {
 
   programs.git = {
     enable = true;
+    difftastic = {
+      enable = true;
+    };
     aliases = {
       mr = "!sh -c 'git fetch $1 merge-requests/$2/head:mr-$1-$2 && git checkout mr-$1-$2' -";
       cob = "checkout -b ";
@@ -50,7 +53,7 @@ in {
       };
     extraConfig = {
       core.editor = "nvim";
-      diff.tool = "vimdiff";
+      # diff.tool = "difft --skip-unchanged";# "vimdiff";
       difftool.prompt = false;
       merge = {
         tool = "vimdiff";
