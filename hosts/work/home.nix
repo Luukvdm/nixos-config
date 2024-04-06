@@ -1,7 +1,4 @@
-{
-  inputs,
-  outputs,
-  config,
+{ inputs, outputs, config,
   pkgs,
   lib,
   hostSecretsDir,
@@ -73,7 +70,7 @@ in {
     packages = with pkgs; [
       insomnia
       glab
-      # awscli2
+      awscli2
       # (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
       # google-cloud-sdk-gce
     ];
