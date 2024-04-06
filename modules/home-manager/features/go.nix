@@ -7,6 +7,21 @@
   cfg = config.myHomeManager.go;
 in {
   options.myHomeManager.go = {
+    package = lib.mkOption {
+      type = with lib.types; types.package;
+      default = pkgs.unstable.go_1_22;
+      description = "The Go package to use.";
+    };
+    gotoolsPackage = lib.mkOption {
+      type = with lib.types; types.package;
+      default = pkgs.unstable.gotools;
+      description = "The gotools package to use.";
+    };
+    gofumptPackage = lib.mkOption {
+      type = with lib.types; types.package;
+      default = pkgs.unstable.gofumpt;
+      description = "The gotools package to use.";
+    };
     includeGoland = lib.mkOption {
       type = with lib.types; bool;
       default = false;
@@ -18,7 +33,7 @@ in {
 
   programs.go = {
     enable = true;
-    package = pkgs.unstable.go_1_22;
+    package = cfg.package;
     goPath = ".local/share/go";
     goBin = ".local/share/go/bin";
     goPrivate = ["gitlab.com/suecode"];
@@ -31,12 +46,14 @@ in {
     # };
   };
 
-  home.packages = with pkgs;
+  home.packages =
     [
-      delve
+      pkgs.unstable.delve
+      cfg.gotoolsPackage
+      cfg.gofumptPackage
     ]
     ++ lib.optionals cfg.includeGoland [
-      jetbrains-toolbox
-      jetbrains.goland
+      pkgs.jetbrains-toolbox
+      pkgs.jetbrains.goland
     ];
 }

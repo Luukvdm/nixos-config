@@ -67,8 +67,7 @@
       autoload -U colors && colors
       PS1="%B %{$fg[green]%}%~%{$reset_color%}%b "
     '';
-    shellAliases = {
-      update = "sudo nixos-rebuild switch";
+    shellAliases = { update = "sudo nixos-rebuild switch";
       sudo = "sudo ";
       ls = "ls --color=auto";
       # ..="cd ..";

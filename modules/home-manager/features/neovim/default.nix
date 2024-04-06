@@ -4,9 +4,7 @@
   lib,
   pkgs,
   ...
-}: let
-  cfg = config.myNixOS.neovim;
-in {
+}: {
   # I would like to have the neovim config in the nixos modules.
   # But I can't get the nixpkgs overwrite to work :(.
   imports = [
@@ -17,8 +15,11 @@ in {
     ./lsp.nix
     ./telescope.nix
     ./treesitter.nix
+    ./none-ls.nix
 
     ./keymaps.nix
+
+    ./langs/go.nix
   ];
 
   home = {
