@@ -104,6 +104,8 @@
     protobuf
     protobufc
     spotify
+
+    google-chat-linux
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
