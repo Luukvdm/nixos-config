@@ -46,7 +46,6 @@
       enable = true;
       sshKeyDir = "sops";
     };
-    gchat.enable = true;
     gnome.enable = true;
     docker.enable = true;
     k8s-tools.enable = true;
