@@ -18,7 +18,7 @@
     # configHome = "/home/${userName}/.config";
     userDirs = {
       enable = true;
-      createDirectories = false;
+      createDirectories = true;
       desktop = "desktop";
       documents = "documents";
       download = "downloads";

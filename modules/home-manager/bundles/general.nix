@@ -17,6 +17,7 @@
   };
 
   myHomeManager.zsh.enable = lib.mkDefault true;
+  myHomeManager.xdg.enable = lib.mkDefault true;
 
   programs.home-manager.enable = true;
 
@@ -34,7 +35,17 @@
     wget
     curl
     dig
-
-    git
   ];
+
+  home = {
+    file = {
+      "${config.xdg.configHome}/wget/wgetrc" = {
+        enable = true;
+        text = "";
+      };
+    };
+    sessionVariables = {
+      WGETRC = "$XDG_CONFIG_HOME/wget/wgetrc";
+    };
+  };
 }
