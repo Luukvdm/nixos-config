@@ -31,7 +31,7 @@ in {
     };
     goimportsRevisorPackage = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.unstable.goimports-reviser;
+      default = gocfg.importsRevisorPackage;
       description = "The goimports-reviser package to use.";
     };
   };

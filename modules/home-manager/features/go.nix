@@ -22,6 +22,11 @@ in {
       default = pkgs.unstable.gofumpt;
       description = "The gotools package to use.";
     };
+    importsRevisorPackage = lib.mkOption {
+      type = with lib.types; types.package;
+      default = pkgs.unstable.goimports-reviser;
+      description = "The package to use for goimports-reviser";
+    };
     includeGoland = lib.mkOption {
       type = with lib.types; bool;
       default = false;
@@ -51,6 +56,7 @@ in {
       pkgs.unstable.delve
       cfg.gotoolsPackage
       cfg.gofumptPackage
+      cfg.importsRevisorPackage
     ]
     ++ lib.optionals cfg.includeGoland [
       pkgs.jetbrains-toolbox
