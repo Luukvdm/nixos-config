@@ -54,6 +54,7 @@ in {
   home.packages =
     [
       pkgs.unstable.delve
+      pkgs.unstable.goperf
       cfg.gotoolsPackage
       cfg.gofumptPackage
       cfg.importsRevisorPackage
