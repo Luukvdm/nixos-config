@@ -7,7 +7,7 @@
 }: {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-devedition;
+    package = pkgs.firefox-devedition-bin;
     # profiles.pengu = {
     #   extensions = with inputs.firefox-addons.packages."x86_64-linux"; [
     #     bitwarden
