@@ -50,6 +50,7 @@
       shiftwidth = 2;
       tabstop = 2;
       number = true;
+      relativenumber = true;
       wrap = false;
       background = "dark";
     };
