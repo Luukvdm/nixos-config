@@ -94,7 +94,7 @@ in {
         */
       };
       autoLogin = {
-        enable = true;
+        enable = false;
         user = cfg.userName;
       };
     };
