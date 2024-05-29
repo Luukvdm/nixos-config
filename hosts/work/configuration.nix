@@ -50,6 +50,7 @@
     docker.enable = true;
     k8s-tools.enable = true;
     terraform.enable = true;
+    clamav.enable = true;
 
     userName = "pengu";
     userConfig = ./home.nix;
@@ -68,8 +69,19 @@
     };
   };
 
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
+  networking = {
+    hostName = "nixos";
+    networkmanager = {
+      enable = true;
+    };
+    nftables = {
+      enable = true;
+    };
+    firewall = {
+      enable = true;
+      pingLimit = "1/minute burst 5 packets";
+    };
+  };
 
   services.fwupd.enable = true;
   services.printing.enable = true;
