@@ -1,4 +1,7 @@
-{ inputs, outputs, config,
+{
+  inputs,
+  outputs,
+  config,
   pkgs,
   lib,
   hostSecretsDir,
@@ -30,6 +33,7 @@ in {
     vscode.enable = true;
     neovim.enable = true;
     xdg.enable = true;
+    gtk.enable = false;
   };
 
   # colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;

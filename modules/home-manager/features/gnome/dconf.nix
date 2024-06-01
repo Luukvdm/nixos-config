@@ -43,7 +43,7 @@
       monospace-font-name = "Hack Nerd Font 10";
       gtk-theme = "Adwaita";
       icon-theme = "Papirus-Dark";
-      cursor-theme = "phinger-cursors";
+      # cursor-theme = "Phinger-cursors";
       show-battery-percentage = true;
     };
     "org/gnome/desktop/sound" = {
