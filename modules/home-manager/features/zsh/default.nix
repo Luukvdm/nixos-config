@@ -17,7 +17,7 @@
     dotDir = ".config/zsh";
     # history.path = "${config.xdg.dataHome}/zsh/zsh_history";
     autocd = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     enableCompletion = true;
     # enableFzfCompletion = true;
     # enableFzfGit = true;
@@ -67,7 +67,8 @@
       autoload -U colors && colors
       PS1="%B %{$fg[green]%}%~%{$reset_color%}%b "
     '';
-    shellAliases = { update = "sudo nixos-rebuild switch";
+    shellAliases = {
+      update = "sudo nixos-rebuild switch";
       sudo = "sudo ";
       ls = "ls --color=auto";
       # ..="cd ..";

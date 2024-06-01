@@ -9,6 +9,7 @@ in {
   environment = {
     sessionVariables = {
       NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
+      XCURSOR_SIZE = "16"; # default 16 I think
     };
 
     systemPackages = with pkgs;
@@ -74,41 +75,45 @@ in {
 
   programs.xwayland.enable = true;
   programs.dconf.enable = true;
-  services.xserver = {
-    enable = true;
+  services = {
+    gnome = {
+      core-shell.enable = true;
+      core-utilities.enable = false;
+    };
     displayManager = {
       defaultSession = "gnome";
-      gdm = {
-        enable = true;
-        wayland = true;
-        /*
-        autoLogin = {
-          delay = 1;
-        };
-        settings = {
-          daemon = {
-            AutomaticLoginEnable = "True";
-            AutomaticLogin = cfg.userName;
-          };
-        };
-        */
-      };
       autoLogin = {
         enable = false;
         user = cfg.userName;
       };
     };
-    desktopManager.gnome = {
-      enable = true;
-      extraGSettingsOverridePackages = [
-        pkgs.nautilus-open-any-terminal
-      ];
-    };
-  };
 
-  services.gnome = {
-    core-shell.enable = true;
-    core-utilities.enable = false;
+    xserver = {
+      enable = true;
+      displayManager = {
+        gdm = {
+          enable = true;
+          wayland = true;
+          /*
+          autoLogin = {
+            delay = 1;
+          };
+          settings = {
+            daemon = {
+              AutomaticLoginEnable = "True";
+              AutomaticLogin = cfg.userName;
+            };
+          };
+          */
+        };
+      };
+      desktopManager.gnome = {
+        enable = true;
+        extraGSettingsOverridePackages = [
+          pkgs.nautilus-open-any-terminal
+        ];
+      };
+    };
   };
 
   xdg.mime = {
