@@ -50,7 +50,10 @@
     docker.enable = true;
     k8s-tools.enable = true;
     terraform.enable = true;
-    clamav.enable = true;
+    clamav = {
+      enable = true;
+      includeGui = true;
+    };
 
     userName = "pengu";
     userConfig = ./home.nix;
