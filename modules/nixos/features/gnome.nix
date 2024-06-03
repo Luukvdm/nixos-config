@@ -9,7 +9,7 @@ in {
   environment = {
     sessionVariables = {
       NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
-      XCURSOR_SIZE = "16"; # default 16 I think
+      XCURSOR_SIZE = "8"; # default 16 I think
     };
 
     systemPackages = with pkgs;
