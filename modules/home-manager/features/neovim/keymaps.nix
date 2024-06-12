@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: let
+  helpers = config.nixvim.helpers;
+in {
   programs.nixvim = {
     keymaps = [
       {
@@ -38,7 +44,7 @@
         mode = "n";
         key = "gD";
         lua = true;
-        action = "vim.lsp.buf.declaration";
+        action = helpers.mkRaw "vim.lsp.buf.declaration";
         options = {desc = "[G]oto [D]eclaration";};
       }
 
@@ -48,7 +54,7 @@
         mode = "n";
         key = "<leader>rn";
         lua = true;
-        action = "vim.lsp.buf.rename";
+        action = helpers.mkRaw "vim.lsp.buf.rename";
         options = {desc = "[R]e[n]ame";};
       }
     ];
