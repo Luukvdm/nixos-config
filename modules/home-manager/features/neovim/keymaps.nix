@@ -40,23 +40,23 @@ in {
         action = "<cmd>echo \"Use j to move!!\"<CR>";
       }
 
-      {
-        mode = "n";
-        key = "gD";
-        lua = true;
-        action = helpers.mkRaw "vim.lsp.buf.declaration";
-        options = {desc = "[G]oto [D]eclaration";};
-      }
+      # {
+      #   mode = "n";
+      #   key = "gD";
+      #   lua = true;
+      #   action = helpers.mkRaw "vim.lsp.buf.declaration";
+      #   options = {desc = "[G]oto [D]eclaration";};
+      # }
 
       # Rename the variable under your cursor
       #  Most Language Servers support renaming across files, etc.
-      {
-        mode = "n";
-        key = "<leader>rn";
-        lua = true;
-        action = helpers.mkRaw "vim.lsp.buf.rename";
-        options = {desc = "[R]e[n]ame";};
-      }
+      # {
+      #   mode = "n";
+      #   key = "<leader>rn";
+      #   lua = true;
+      #   action = helpers.mkRaw "vim.lsp.buf.rename";
+      #   options = {desc = "[R]e[n]ame";};
+      # }
     ];
   };
 }
