@@ -113,8 +113,6 @@
     gcc
     skaffold
     dapr-cli
-    # redocly-cli
-    openapi-generator-cli
     protobuf
     protobufc
     spotify
