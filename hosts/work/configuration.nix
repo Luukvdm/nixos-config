@@ -54,6 +54,10 @@
       enable = true;
       includeGui = true;
     };
+    dotnet = {
+      enable = true;
+      includeRider = false;
+    };
 
     userName = "pengu";
     userConfig = ./home.nix;
