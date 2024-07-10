@@ -5,6 +5,13 @@
   ...
 }: let
   cfg = config.myNixOS.dotnet;
+
+  dotnetPkg = with pkgs; (with dotnetCorePackages;
+    combinePackages [
+      dotnet-sdk_8
+      dotnet-runtime_8
+      dotnet-aspnetcore_8
+    ]);
 in {
   options.myNixOS.dotnet = {
     includeRider = lib.mkOption {
@@ -19,6 +26,8 @@ in {
   environment = {
     sessionVariables = {
       DOTNET_CLI_TELEMETRY_OPTOUT = "1";
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE = "1";
+      DOTNET_ROOT = "${dotnetPkg}";
 
       NUGET_PACKAGES = "$XDG_CACHE_HOME/NuGetPackages";
       DOTNET_CLI_HOME = "$XDG_CONFIG_HOME/dotnet";
@@ -26,24 +35,16 @@ in {
 
     systemPackages = with pkgs;
       [
-        (
-          with dotnetCorePackages;
-            combinePackages [
-              dotnet-aspnetcore_7
-              dotnet-runtime_7
-              dotnet-sdk_7
+        dotnetPkg
 
-              dotnet-sdk_8
-              dotnet-runtime_8
-              dotnet-aspnetcore_8
-            ]
-        )
+        msbuild
         dotnetPackages.Nuget
         netcoredbg
-        omnisharp-roslyn
         fsautocomplete
         roslyn
+        omnisharp-roslyn
         roslyn-ls
+        csharp-ls
 
         vscode-extensions.ms-dotnettools.csharp
       ]
