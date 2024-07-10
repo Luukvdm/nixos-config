@@ -17,7 +17,8 @@
       bbenoist.nix
       editorconfig.editorconfig
       mkhl.direnv
-      ms-dotnettools.csharp
+
+      jdinhlife.gruvbox
     ];
 
     enableUpdateCheck = false;
@@ -25,12 +26,34 @@
     mutableExtensionsDir = false;
 
     userSettings = {
-      update.mode = "none";
+      "update.mode" = "none";
+
+      "window.zoomLevel" = 0.5;
+      "workbench.colorTheme" = "Gruvbox Dark Medium";
+
+      "editor.fontFamily" = "'Hack', 'Droid Sans Mono', 'monospace'";
+      "editor.minimap.enabled" = false;
+      "editor.minimap.autohide" = true;
 
       "files.exclude" = {
-        # removes these from the search
         "**/.direnv" = true;
         "**/.devenv" = true;
+
+        "node_modules/" = true;
+        "out/" = true;
+        "vendor/" = true;
+      };
+
+      "terminal.integrated.tabs.enabled" = true;
+
+      "telemetry.telemetryLevel" = "off";
+
+      "dotnet.server.useOmnisharp" = true;
+      "[csharp]" = {
+        "editor.defaultFormatter" = "ms-dotnettools.csharp";
+        "editor.formatOnPaste" = true;
+        "editor.formatOnSave" = true;
+        "editor.formatOnType" = false;
       };
     };
   };
