@@ -56,7 +56,7 @@
     };
     dotnet = {
       enable = true;
-      includeRider = false;
+      includeRider = true;
     };
 
     userName = "pengu";

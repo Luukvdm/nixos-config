@@ -50,7 +50,7 @@ in {
       ]
       ++ lib.optionals cfg.includeRider [
         jetbrains-toolbox
-        jetbrainsider
+        jetbrains.rider
       ];
   };
 }
