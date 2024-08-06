@@ -33,7 +33,15 @@
             # d2_fmt.enable = true;
             pg_format.enable = true;
             rego.enable = true;
-            yamlfmt.enable = true;
+            yamlfmt = {
+              enable = true;
+              settings = {
+                extra_args = [
+                  "-formatter"
+                  "retain_line_breaks_single=true,trim_trailing_whitespace=true"
+                ];
+              };
+            };
           };
           hover = {};
         };

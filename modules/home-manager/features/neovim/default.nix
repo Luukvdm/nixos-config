@@ -79,6 +79,9 @@
       };
     };
 
+    viAlias = true;
+    vimAlias = true;
+
     extraPackages = with pkgs.unstable; [
       gawk # trim_whitespace
       alejandra
