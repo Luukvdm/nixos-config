@@ -9,7 +9,8 @@
   # But I can't get the nixpkgs overwrite to work :(.
   imports = [
     # overwrite nixpkgs with unstable branch
-    ({...} @ args: (inputs.nixvim.homeManagerModules.nixvim (args // {pkgs = pkgs.unstable;})))
+    # ({...} @ args: (inputs.nixvim.homeManagerModules.nixvim (args // {pkgs = pkgs.unstable;})))
+    inputs.nixvim.homeManagerModules.nixvim
 
     ./cmp.nix
     ./lsp.nix
@@ -82,7 +83,7 @@
     viAlias = true;
     vimAlias = true;
 
-    extraPackages = with pkgs.unstable; [
+    extraPackages = with pkgs; [
       gawk # trim_whitespace
       alejandra
     ];
