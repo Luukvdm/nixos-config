@@ -32,6 +32,7 @@ in {
         gnome-font-viewer
         gnome-power-manager
         gnome-screenshot
+        gnome-themes-extra
         eog
         gnome-calculator
         sushi
@@ -43,6 +44,7 @@ in {
         dash-to-dock
         appindicator
         removable-drive-menu
+        legacy-gtk3-theme-scheme-auto-switcher
       ]);
 
     gnome.excludePackages =

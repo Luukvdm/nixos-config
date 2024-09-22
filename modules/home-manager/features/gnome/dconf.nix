@@ -22,6 +22,7 @@
         "appindicatorsupport@rgcjonas.gmail.com"
         "dash-to-dock@micxgx.gmail.com"
         "drive-menu@gnome-shell-extensions.gcampax.github.com"
+        "legacyschemeautoswitcher@joshimukul29.gmail.com"
       ];
     };
     "org/gnome/shell/extensions/dash-to-dock" = {
@@ -41,7 +42,7 @@
       font-name = "Cantarell 11";
       document-font-name = "Cantarell 11";
       monospace-font-name = "Hack Nerd Font 10";
-      gtk-theme = "Adwaita";
+      gtk-theme = "Adwaita-dark";
       icon-theme = "Papirus-Dark";
       # cursor-theme = "Phinger-cursors";
       show-battery-percentage = true;
