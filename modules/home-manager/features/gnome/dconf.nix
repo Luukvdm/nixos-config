@@ -18,7 +18,7 @@
         "firefox-devedition.desktop"
         "goland.desktop"
       ];
-      enable-extensions = [
+      enabled-extensions = [
         "appindicatorsupport@rgcjonas.gmail.com"
         "dash-to-dock@micxgx.gmail.com"
         "drive-menu@gnome-shell-extensions.gcampax.github.com"
@@ -46,6 +46,9 @@
       icon-theme = "Papirus-Dark";
       # cursor-theme = "Phinger-cursors";
       show-battery-percentage = true;
+    };
+    "org/gnome/desktop/wm/preferences" = {
+      resize-with-right-button = true;
     };
     "org/gnome/desktop/sound" = {
       theme-name = "freedesktop";
