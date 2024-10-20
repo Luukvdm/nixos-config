@@ -36,12 +36,6 @@ in {
         # path = "${config.xdg.configHome}/git/github";
         path = "/home/pengu/.config/git/github";
       };
-      sueUser = {
-        sopsFile = hostSecretsDir + /sue/git.ini;
-        format = "ini";
-        # path = "${config.xdg.configHome}/git/sue";
-        path = "/home/pengu/.config/git/sue";
-      };
     };
   };
 }

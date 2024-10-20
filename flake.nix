@@ -104,6 +104,17 @@
           outputs.nixosModules.default
         ];
       };
+      desktop = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs outputs myLib;
+          hostSecretsDir = self + "/secrets";
+        };
+        modules = [
+          ./hosts/desktop/configuration.nix
+          # sops-nix.nixosModules.sops
+          outputs.nixosModules.default
+        ];
+      };
       pi = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs myLib;
