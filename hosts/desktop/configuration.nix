@@ -44,6 +44,7 @@
       sshKeyDir = "sops";
     };
     gnome.enable = true;
+    steam.enable = true;
 
     userName = "pengu";
     userConfig = ./home.nix;
