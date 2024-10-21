@@ -53,6 +53,9 @@
     "org/gnome/desktop/sound" = {
       theme-name = "freedesktop";
     };
+    "org/gnome/desktop/session" = {
+      idle-delay = 0;
+    };
     "org/gnome/desktop/default-application/terminal" = {
       exec = "tilix";
     };
@@ -65,8 +68,6 @@
     };
     "org/gnome/settings-daemon/plugins/media-keys" = {
       www = ["<Super>w"];
-    };
-    "org/gnome/settings-daemon/plugins/media-keys" = {
       custom-keybindings = ["/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"];
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -76,6 +77,7 @@
     };
     "org/gnome/settings-daemon/plugins/power" = {
       power-button-action = "suspend";
+      sleep-inactive-ac-timeout = 5400;
     };
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
