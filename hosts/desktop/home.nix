@@ -17,6 +17,14 @@ in {
     sops = {
       enable = true;
       sshKeyDir = "sops";
+      secrets = {
+        githubUser = {
+          sopsFile = ../../secrets/github.ini;
+          format = "ini";
+          # path = "${config.xdg.configHome}/git/github";
+          path = "/home/${username}/.config/git/github";
+        };
+      };
     };
     firefox.enable = true;
     git = {

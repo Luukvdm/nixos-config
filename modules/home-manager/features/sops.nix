@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }: let
   cfg = config.myHomeManager.sops;
@@ -13,6 +14,14 @@ in {
       default = "nixos";
       description = ''
         Directory in ~/.ssh/ that holds the keys for sops.
+      '';
+    };
+
+    secrets = lib.mkOption {
+      type = lib.types.attrs;
+      default = {};
+      description = ''
+        Secrets to decrypt.
       '';
     };
   };
@@ -29,13 +38,6 @@ in {
       generateKey = true;
     };
 
-    secrets = {
-      githubUser = {
-        sopsFile = hostSecretsDir + /github.ini;
-        format = "ini";
-        # path = "${config.xdg.configHome}/git/github";
-        path = "/home/pengu/.config/git/github";
-      };
-    };
+    secrets = cfg.secrets;
   };
 }

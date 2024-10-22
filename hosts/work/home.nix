@@ -16,8 +16,21 @@ in {
     bundles.gnome-desktop.enable = true;
     sops = {
       enable = true;
-      enableSue = true;
       sshKeyDir = "sops";
+      secrets = {
+        githubUser = {
+          sopsFile = ../../secrets/github.ini;
+          format = "ini";
+          path = "${config.xdg.configHome}/git/github";
+          # path = "/home/${username}/.config/git/github";
+        };
+        sueUser = {
+          sopsFile = ../../secrets/sue/git.ini;
+          format = "ini";
+          # path = "${config.xdg.configHome}/git/sue";
+          path = "/home/${username}/.config/git/sue";
+        };
+      };
     };
     firefox.enable = true;
     git = {
@@ -80,12 +93,5 @@ in {
       # (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
       # google-cloud-sdk-gce
     ];
-
-    sops.secrets.sueUser = {
-      sopsFile = ../../sue/git.ini;
-      format = "ini";
-      # path = "${config.xdg.configHome}/git/sue";
-      path = "/home/pengu/.config/git/sue";
-    };
   };
 }
