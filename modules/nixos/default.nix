@@ -59,7 +59,19 @@ in {
   };
 
   config = {
-    nix.settings.experimental-features = ["nix-command" "flakes"];
-    nix.settings.auto-optimise-store = true;
+    nix = {
+      package = pkgs.nix;
+      settings = {
+        experimental-features = ["nix-command" "flakes"];
+        auto-optimise-store = true;
+      };
+      optimise = {
+        automatic = true;
+      };
+      gc = {
+        automatic = true;
+        dates = "weekly";
+      };
+    };
   };
 }
