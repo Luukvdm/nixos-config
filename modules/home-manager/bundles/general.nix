@@ -17,6 +17,7 @@
   };
 
   myHomeManager.zsh.enable = lib.mkDefault true;
+  myHomeManager.starship.enable = lib.mkDefault true;
   myHomeManager.xdg.enable = lib.mkDefault true;
 
   programs.home-manager.enable = true;
@@ -24,7 +25,6 @@
   home.packages = with pkgs; [
     nix-index
 
-    zsh
     file
     bat
     fzf

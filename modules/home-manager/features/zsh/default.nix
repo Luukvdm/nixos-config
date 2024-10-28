@@ -95,9 +95,9 @@
   programs.zsh.oh-my-zsh = {
     enable = true;
     plugins = ["git" "golang" "python" "npm" "node" "man" "history" "docker" "docker-compose" "kubectl" "helm"];
-    theme = "gruvbox";
+    # theme = "gruvbox";
     #  custom = "${config.xdg.configHome}/oh-my-zsh/custom";
-    custom = builtins.toPath ./. + "/omz-custom/";
+    # custom = builtins.toPath ./omz-custom;
     # customPkgs = with pkgs; [
     #   nix-zsh-completions
     #   # and even more...
