@@ -45,6 +45,7 @@
     };
     gnome.enable = true;
     steam.enable = true;
+    k8s-tools.enable = true;
 
     userName = "pengu";
     userConfig = ./home.nix;
@@ -87,7 +88,11 @@
     nixos-generators
     python3
     gotop
+
     spotify
+    lvm2
+    vlc
+    vesktop
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
