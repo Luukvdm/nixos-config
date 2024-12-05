@@ -22,6 +22,11 @@ in {
       default = pkgs.unstable.gofumpt;
       description = "The gotools package to use.";
     };
+    golangCiLintPackage = lib.mkOption {
+      type = with lib.types; types.package;
+      default = pkgs.unstable.golangci-lint;
+      description = "The golangci-lint package to use.";
+    };
     importsRevisorPackage = lib.mkOption {
       type = with lib.types; types.package;
       default = pkgs.unstable.goimports-reviser;
@@ -55,6 +60,7 @@ in {
     [
       pkgs.unstable.delve
       pkgs.unstable.goperf
+      cfg.golangCiLintPackage
       cfg.gotoolsPackage
       cfg.gofumptPackage
       cfg.importsRevisorPackage
