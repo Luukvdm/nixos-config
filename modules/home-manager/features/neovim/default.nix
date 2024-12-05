@@ -68,6 +68,9 @@
       gitsigns = {
         enable = true;
       };
+      web-devicons = {
+        enable = true;
+      };
       # lspsaga.enable = true;
       nvim-tree = {
         enable = true;

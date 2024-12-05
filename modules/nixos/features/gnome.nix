@@ -20,8 +20,7 @@ in {
         gtk4
         papirus-icon-theme
         nautilus-open-any-terminal
-      ]
-      ++ (with pkgs.gnome; [
+
         dconf-editor
         zenity
         gnome-bluetooth
@@ -39,7 +38,7 @@ in {
         nautilus
         nautilus-python
         simple-scan
-      ])
+      ]
       ++ (with pkgs.gnomeExtensions; [
         dash-to-dock
         appindicator
@@ -56,7 +55,7 @@ in {
         # gnome-connections
         # snapshot
       ])
-      ++ (with pkgs.gnome; [
+      ++ (with pkgs; [
         # cheese # webcam tool
         gnome-music
         epiphany # web browser

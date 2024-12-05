@@ -3,25 +3,24 @@
     plugins = {
       treesitter = {
         enable = true;
-        # settings = {
-        indent = true;
-        # indent = {
-        #   enable = true;
-        # };
-        ensureInstalled = [
-          "bash"
-          "css"
-          "dockerfile"
-          "go"
-          "gomod"
-          "html"
-          "javascript"
-          "markdown"
-          "python"
-          "vue"
-          "yaml"
-        ];
-        # };
+        settings = {
+          indent = {
+            enable = true;
+          };
+          ensureInstalled = [
+            "bash"
+            "css"
+            "dockerfile"
+            "go"
+            "gomod"
+            "html"
+            "javascript"
+            "markdown"
+            "python"
+            "vue"
+            "yaml"
+          ];
+        };
       };
       treesitter-context = {
         enable = true;

@@ -7,7 +7,7 @@
         servers = {
           bashls.enable = true;
           dockerls.enable = true;
-          golangci-lint-ls.enable = true;
+          golangci_lint_ls.enable = true;
           gopls = {
             enable = true;
             extraOptions = {
@@ -17,7 +17,7 @@
               };
             };
           };
-          helm-ls.enable = true;
+          helm_ls.enable = true;
           jsonls.enable = true;
           marksman.enable = true;
           pylsp.enable = true;
