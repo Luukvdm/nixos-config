@@ -60,6 +60,7 @@ in {
     [
       pkgs.unstable.delve
       pkgs.unstable.goperf
+      pkgs.unstable.gopls
       cfg.golangCiLintPackage
       cfg.gotoolsPackage
       cfg.gofumptPackage
