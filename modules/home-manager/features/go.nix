@@ -9,7 +9,7 @@ in {
   options.myHomeManager.go = {
     package = lib.mkOption {
       type = with lib.types; types.package;
-      default = pkgs.unstable.go_1_23;
+      default = pkgs.unstable.go_1_24;
       description = "The Go package to use.";
     };
     gotoolsPackage = lib.mkOption {
