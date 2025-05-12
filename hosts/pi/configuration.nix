@@ -21,7 +21,6 @@
     # virtualisation.enable = lib.mkDefaut true;
 
     # sharedSettings.hyprland.enable = false;
-    userName = "pengu";
     userConfig = ./home.nix;
 
     # userNixosSettings = {

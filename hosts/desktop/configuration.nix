@@ -4,6 +4,7 @@
   lib,
   config,
   pkgs,
+  username,
   ...
 }: {
   imports = [
@@ -47,7 +48,6 @@
     steam.enable = true;
     k8s-tools.enable = true;
 
-    userName = "pengu";
     userConfig = ./home.nix;
   };
 

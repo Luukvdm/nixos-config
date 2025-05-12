@@ -85,6 +85,7 @@
         specialArgs = {
           inherit inputs outputs myLib;
           hostSecretsDir = self + "/secrets";
+          username = "luuk";
         };
         modules = [
           ./hosts/thinkpad/configuration.nix
@@ -97,6 +98,7 @@
         specialArgs = {
           inherit inputs outputs myLib;
           hostSecretsDir = self + "/secrets";
+          username = "pengu";
         };
         modules = [
           ./hosts/work/configuration.nix
@@ -108,6 +110,7 @@
         specialArgs = {
           inherit inputs outputs myLib;
           hostSecretsDir = self + "/secrets";
+          username = "luuk";
         };
         modules = [
           ./hosts/desktop/configuration.nix
@@ -118,6 +121,7 @@
       pi = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs myLib;
+          username = "luuk";
         };
         modules = [
           ./hosts/pi/configuration.nix

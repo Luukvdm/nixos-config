@@ -24,6 +24,19 @@ in {
         Secrets to decrypt.
       '';
     };
+
+    keyFile = lib.mkOption {
+      type = with lib.types; str;
+      default = "~/.config/sops/age/keys.txt";
+      description = ''
+      '';
+    };
+    keyPaths = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [];
+      description = ''
+      '';
+    };
   };
 
   sops = {
@@ -31,10 +44,8 @@ in {
     defaultSopsFormat = "yaml";
 
     age = {
-      # sshKeyPaths = ["${config.home.homeDirectory}/.ssh/${cfg.sshKeyDir}/id_ed25519"];
-      sshKeyPaths = ["/home/pengu/.ssh/${cfg.sshKeyDir}/id_ed25519"];
-      # keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
-      keyFile = "/home/pengu/.config/sops/age/keys.txt";
+      sshKeyPaths = cfg.keyPaths;
+      keyFile = cfg.keyFile;
       generateKey = true;
     };
 

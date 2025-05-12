@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  username,
   ...
 }: {
   home.packages = with pkgs; [
@@ -51,7 +52,7 @@
     sessionVariables = {
     };
     envExtra = ''
-      # export DEFAULT_USER=$\{config.myNixOS.userName};
+      # export DEFAULT_USER=$\{username};
       export PATH="$XDG_DATA_HOME/JetBrains/Toolbox/scripts:$XDG_DATA_HOME/go/bin:$XDG_CONFIG_HOME/dotnet/.dotnet/tools:$PATH";
 
       # this should probably be in profile

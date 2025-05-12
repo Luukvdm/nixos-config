@@ -34,6 +34,11 @@
     })
     (myLib.filesIn ./bundles);
 in {
+  options.myHomeManager.username = lib.mkOption {
+    type = with lib.types; str;
+    default = "luuk";
+  };
+
   imports =
     []
     ++ features

@@ -59,7 +59,6 @@
       includeRider = true;
     };
 
-    userName = "pengu";
     userConfig = ./home.nix;
   };
 

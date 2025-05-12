@@ -5,10 +5,9 @@
   pkgs,
   lib,
   hostSecretsDir,
+  username,
   ...
-}: let
-  username = "pengu";
-in {
+}: {
   imports = [outputs.homeManagerModules.default];
 
   myHomeManager = {

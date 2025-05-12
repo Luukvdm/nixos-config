@@ -6,18 +6,12 @@
   myLib,
   pkgs,
   hostSecretsDir,
+  username,
   ...
 }: let
   cfg = config.myNixOS;
 in {
   options.myNixOS = {
-    userName = lib.mkOption {
-      default = "pengu";
-      description = ''
-        username
-      '';
-    };
-
     userConfig = lib.mkOption {
       default = ./../../home-manager/pengu.nix;
       description = ''
@@ -47,7 +41,7 @@ in {
 
     home-manager = {
       extraSpecialArgs = {
-        inherit inputs myLib hostSecretsDir;
+        inherit inputs myLib hostSecretsDir username;
         outputs = inputs.self.outputs;
         sharedSettings = cfg.sharedSettings;
       };
@@ -55,7 +49,7 @@ in {
         inputs.sops-nix.homeManagerModules.sops
       ];
       users = {
-        ${cfg.userName} = {...}: {
+        ${username} = {...}: {
           imports = [
             (import cfg.userConfig)
             outputs.homeManagerModules.default
@@ -64,11 +58,11 @@ in {
       };
     };
 
-    users.users.${cfg.userName} =
+    users.users.${username} =
       {
         isNormalUser = true;
         initialPassword = "12345";
-        description = cfg.userName;
+        description = username;
         shell = pkgs.zsh;
         extraGroups = ["networkmanager" "wheel" "docker"];
       }

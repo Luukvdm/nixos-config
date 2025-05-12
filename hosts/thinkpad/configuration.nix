@@ -31,7 +31,6 @@
     };
 
     # sharedSettings.hyprland.enable = false;
-    userName = "pengu";
     userConfig = ./home.nix;
 
     # userNixosSettings = {

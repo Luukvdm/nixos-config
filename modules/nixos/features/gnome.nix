@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  username,
   ...
 }: let
   cfg = config.myNixOS;
@@ -85,7 +86,7 @@ in {
       defaultSession = "gnome";
       autoLogin = {
         enable = false;
-        user = cfg.userName;
+        user = username;
       };
     };
 
