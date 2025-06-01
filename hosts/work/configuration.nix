@@ -14,29 +14,6 @@
     ./hardware-configuration.nix
   ];
 
-  nixpkgs = {
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   myNixOS = {
     bundles.general-desktop.enable = true;
     bundles.gnome-desktop.enable = true;
@@ -110,18 +87,16 @@
     nix-index
     nixos-generators
     python3
-    gotop
     gnumake
     gcc
     skaffold
-    dapr-cli
     protobuf
     protobufc
-    spotify
 
+    spotify
     google-chat-linux
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 }

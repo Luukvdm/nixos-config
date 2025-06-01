@@ -50,28 +50,4 @@ in {
     ++ features
     ++ bundles;
   # ++ services;
-
-  options.myNixOS = {
-    sharedSettings = {
-      # hyprland.enable = lib.mkEnableOption "enable hyprland";
-      gnome.enable = lib.mkEnableOption "enable gnome";
-    };
-  };
-
-  config = {
-    nix = {
-      package = pkgs.nix;
-      settings = {
-        experimental-features = ["nix-command" "flakes"];
-        auto-optimise-store = true;
-      };
-      optimise = {
-        automatic = true;
-      };
-      gc = {
-        automatic = true;
-        dates = "weekly";
-      };
-    };
-  };
 }

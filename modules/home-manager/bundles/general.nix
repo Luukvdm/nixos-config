@@ -9,12 +9,12 @@
     # inputs.nix-colors.homeManagerModules.default
   ];
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      experimental-features = "nix-command flakes";
-    };
-  };
+  # nixpkgs = {
+  #   config = {
+  #     allowUnfree = true;
+  #     experimental-features = "nix-command flakes";
+  #   };
+  # };
 
   myHomeManager.zsh.enable = lib.mkDefault true;
   myHomeManager.starship.enable = lib.mkDefault true;

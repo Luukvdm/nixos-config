@@ -54,94 +54,16 @@
     #   pkgs = import nixpkgs { inherit system; };
     # });
   in {
-    # Your custom packages
-    # Acessible through 'nix build', 'nix shell', etc
-    # packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
     packages = forAllSystems (pkgs: import ./pkgs {inherit pkgs;});
-
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs;};
 
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    # nixosModules = import ./modules/nixos;
-
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    # homeManagerModules = import ./modules/home-manager;
-
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      thinkpad = nixpkgs.lib.nixosSystem {
-        # specialArgs = {
-        #   inherit inputs outputs myLib;
-        # };
-
-        specialArgs = {
-          inherit inputs outputs myLib;
-          hostSecretsDir = self + "/secrets";
-          username = "luuk";
-        };
-        modules = [
-          ./hosts/thinkpad/configuration.nix
-
-          # inputs.home-manager.nixosModules.home-manager
-          outputs.nixosModules.default
-        ];
+      desktop = myLib.mkSystem "desktop" {
+        system = "x86_64-linux";
       };
-      work = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs outputs myLib;
-          hostSecretsDir = self + "/secrets";
-          username = "pengu";
-        };
-        modules = [
-          ./hosts/work/configuration.nix
-          # sops-nix.nixosModules.sops
-          outputs.nixosModules.default
-        ];
-      };
-      desktop = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs outputs myLib;
-          hostSecretsDir = self + "/secrets";
-          username = "luuk";
-        };
-        modules = [
-          ./hosts/desktop/configuration.nix
-          # sops-nix.nixosModules.sops
-          outputs.nixosModules.default
-        ];
-      };
-      pi = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs outputs myLib;
-          username = "luuk";
-        };
-        modules = [
-          ./hosts/pi/configuration.nix
-
-          # inputs.home-manager.nixosModules.home-manager
-          outputs.nixosModules.default
-          # ./modules/home-manager
-        ];
-      };
-    };
-    homeConfigurations = {
-      "pengu@pi" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
-        extraSpecialArgs = {
-          inherit inputs outputs myLib;
-        };
-        modules = [
-          ./hosts/pi/home.nix
-          outputs.homeManagerModules.default
-        ];
+      work = myLib.mkSystem "work" {
+        system = "x86_64-linux";
       };
     };
 

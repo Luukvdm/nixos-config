@@ -5,13 +5,17 @@
 }: {
   myNixOS = {
     locale.enable = true;
-    fonts.enable = true;
+    openssh.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [btop neovim vlc];
   programs = {
     git = {
       enable = true;
     };
+  };
+
+  documentation = {
+    man.enable = lib.mkDefault false;
+    nixos.enable = lib.mkDefault false;
   };
 }

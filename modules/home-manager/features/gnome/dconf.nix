@@ -4,6 +4,9 @@
   ...
 }: {
   dconf.settings = {
+    "com/github/stunkymonkey/nautilus-open-any-terminal" = {
+      new-tab = true;
+    };
     "org/gnome/mutter" = {
       dynamic-workspaces = true;
       edge-tiling = true;

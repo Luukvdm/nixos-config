@@ -12,32 +12,8 @@
     ./hardware-configuration.nix
   ];
 
-  nixpkgs = {
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   myNixOS = {
     bundles.general-desktop.enable = true;
-    bundles.gnome-desktop.enable = true;
     bundles.home-manager.enable = true;
     power-management.enable = false;
     sops = {
@@ -46,11 +22,13 @@
     };
     gnome.enable = true;
     steam.enable = true;
+    rgb.enable = true;
     k8s-tools.enable = true;
 
     userConfig = ./home.nix;
   };
 
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -70,6 +48,7 @@
   services.printing.enable = true;
 
   hardware.pulseaudio.enable = false;
+  hardware.logitech.wireless.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -86,14 +65,17 @@
     nix-index
     nixos-generators
     python3
-    gotop
+    lvm2
 
     spotify
-    lvm2
-    vlc
     vesktop
-  ];
+    runelite
+    fragments
+    logitech-udev-rules
+    solaar
+    gnomeExtensions.solaar-extension
 
-  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-  system.stateVersion = "24.11";
+    tpi
+  ];
+  services.flatpak.enable = true;
 }

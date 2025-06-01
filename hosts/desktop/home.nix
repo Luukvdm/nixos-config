@@ -4,7 +4,6 @@
   config,
   pkgs,
   lib,
-  hostSecretsDir,
   username,
   ...
 }: {
@@ -39,28 +38,16 @@
     zed.enable = true;
     xdg.enable = true;
     gtk.enable = false;
+    go.enable = true;
+    vscode.enable = true;
   };
 
   # colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;
 
-  nixpkgs = {
-    overlays = [
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      allowUnfree = true;
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
-    };
-  };
-
   home = {
     username = username;
     homeDirectory = lib.mkDefault "/home/${username}";
-    stateVersion = "24.11";
+    stateVersion = "25.05";
 
     packages = with pkgs; [
     ];

@@ -19,6 +19,8 @@
       mkhl.direnv
 
       jdinhlife.gruvbox
+
+      golang.go
     ];
 
     enableUpdateCheck = false;

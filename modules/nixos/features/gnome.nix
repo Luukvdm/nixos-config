@@ -20,7 +20,6 @@ in {
         xdg-desktop-portal-gnome
         gtk4
         papirus-icon-theme
-        nautilus-open-any-terminal
 
         dconf-editor
         zenity
@@ -74,6 +73,10 @@ in {
         gnome-maps
       ]);
   };
+  programs.nautilus-open-any-terminal = {
+    enable = true;
+    terminal = "tilix";
+  };
 
   programs.xwayland.enable = true;
   programs.dconf.enable = true;
@@ -111,9 +114,9 @@ in {
       };
       desktopManager.gnome = {
         enable = true;
-        extraGSettingsOverridePackages = [
-          pkgs.nautilus-open-any-terminal
-        ];
+        # extraGSettingsOverridePackages = [
+        # pkgs.nautilus-open-any-terminal
+        # ];
       };
     };
   };

@@ -1,8 +1,42 @@
-# https://github.com/vimjoyer/nixconf/myLib/default.nix
-{inputs}: let
-  # myLib = (import ./default.nix) {inherit inputs;};
-  # outputs = inputs.self.outputs;
+{inputs, ...}: let
+  myLib = (import ./default.nix) {inherit inputs;};
+  outputs = inputs.self.outputs;
 in rec {
+  mkSystem = host: {
+    system ? "x86_64-linux",
+    defaultUsername ? "luuk",
+    description ? "",
+    extraModules ? [],
+  }:
+    inputs.nixpkgs.lib.nixosSystem {
+      inherit system;
+
+      specialArgs = {
+        inherit inputs outputs myLib;
+
+        username = defaultUsername;
+        hostSecretsDir = inputs.self + "/secrets";
+
+        pkgsUnstable = inputs.nixpkgs-unstable.legacyPackages.${system};
+      };
+
+      modules =
+        [
+          ({config, ...}: {
+            nixpkgs = {
+              hostPlatform = system;
+            };
+          })
+
+          ../modules/defaults/user.nix
+          ../modules/defaults/nix-settings.nix
+          ../modules/defaults/system.nix
+          outputs.nixosModules.default
+          ../hosts/${host}
+        ]
+        ++ extraModules;
+    };
+
   filesIn = dir: (map (fname: dir + "/${fname}")
     (builtins.attrNames (builtins.readDir dir)));
 

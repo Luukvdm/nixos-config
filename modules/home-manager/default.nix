@@ -5,7 +5,7 @@
   config,
   lib,
   myLib,
-  sharedSettings ? {},
+  username,
   ...
 }: let
   cfg = config.myHomeManager;
@@ -36,7 +36,7 @@
 in {
   options.myHomeManager.username = lib.mkOption {
     type = with lib.types; str;
-    default = "luuk";
+    default = username;
   };
 
   imports =
