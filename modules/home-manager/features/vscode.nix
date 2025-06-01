@@ -11,51 +11,53 @@
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
-    extensions = with pkgs.vscode-extensions; [
-      vscodevim.vim
-      kamadorueda.alejandra
-      bbenoist.nix
-      editorconfig.editorconfig
-      mkhl.direnv
-
-      jdinhlife.gruvbox
-
-      golang.go
-    ];
-
-    enableUpdateCheck = false;
-    enableExtensionUpdateCheck = false;
     mutableExtensionsDir = false;
 
-    userSettings = {
-      "update.mode" = "none";
+    profiles.default = {
+      extensions = with pkgs.vscode-extensions; [
+        vscodevim.vim
+        kamadorueda.alejandra
+        bbenoist.nix
+        editorconfig.editorconfig
+        mkhl.direnv
 
-      "window.zoomLevel" = 0.5;
-      "workbench.colorTheme" = "Gruvbox Dark Medium";
+        jdinhlife.gruvbox
 
-      "editor.fontFamily" = "'Hack', 'Droid Sans Mono', 'monospace'";
-      "editor.minimap.enabled" = false;
-      "editor.minimap.autohide" = true;
+        golang.go
+      ];
+      enableUpdateCheck = false;
+      enableExtensionUpdateCheck = false;
 
-      "files.exclude" = {
-        "**/.direnv" = true;
-        "**/.devenv" = true;
+      userSettings = {
+        "update.mode" = "none";
 
-        "node_modules/" = true;
-        "out/" = true;
-        "vendor/" = true;
-      };
+        "window.zoomLevel" = 0.5;
+        "workbench.colorTheme" = "Gruvbox Dark Medium";
 
-      "terminal.integrated.tabs.enabled" = true;
+        "editor.fontFamily" = "'Hack', 'Droid Sans Mono', 'monospace'";
+        "editor.minimap.enabled" = false;
+        "editor.minimap.autohide" = true;
 
-      "telemetry.telemetryLevel" = "off";
+        "files.exclude" = {
+          "**/.direnv" = true;
+          "**/.devenv" = true;
 
-      "dotnet.server.useOmnisharp" = true;
-      "[csharp]" = {
-        "editor.defaultFormatter" = "ms-dotnettools.csharp";
-        "editor.formatOnPaste" = true;
-        "editor.formatOnSave" = true;
-        "editor.formatOnType" = false;
+          "node_modules/" = true;
+          "out/" = true;
+          "vendor/" = true;
+        };
+
+        "terminal.integrated.tabs.enabled" = true;
+
+        "telemetry.telemetryLevel" = "off";
+
+        "dotnet.server.useOmnisharp" = true;
+        "[csharp]" = {
+          "editor.defaultFormatter" = "ms-dotnettools.csharp";
+          "editor.formatOnPaste" = true;
+          "editor.formatOnSave" = true;
+          "editor.formatOnType" = false;
+        };
       };
     };
   };

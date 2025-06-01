@@ -83,7 +83,7 @@ in {
   services = {
     gnome = {
       core-shell.enable = true;
-      core-utilities.enable = false;
+      core-apps.enable = false;
     };
     displayManager = {
       defaultSession = "gnome";

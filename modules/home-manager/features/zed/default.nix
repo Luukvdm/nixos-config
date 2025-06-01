@@ -44,6 +44,7 @@
         calt = false;
         liga = false;
       };
+      format_on_save = "on";
       file_types = {
         Dockerfile = ["Dockerfile" "Dockerfile.*"];
       };
@@ -55,6 +56,19 @@
       calls = {
         mute_on_join = true;
         share_on_join = false;
+      };
+      languages = {
+        Nix = {
+          language_servers = [
+            "nil"
+            "!nixd"
+          ];
+          formatter = {
+            external = {
+              command = "alejandra";
+            };
+          };
+        };
       };
     };
   };
