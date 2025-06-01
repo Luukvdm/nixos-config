@@ -4,7 +4,9 @@
     packages = with pkgs; [
       powerline-fonts
       font-awesome
-      (nerdfonts.override {fonts = ["Hack" "DejaVuSansMono" "Go-Mono"];})
+      nerd-fonts.hack
+      nerd-fonts.dejavu-sans-mono
+      nerd-fonts.go-mono
     ];
 
     fontconfig = {
