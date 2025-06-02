@@ -67,7 +67,7 @@ in {
       cfg.importsRevisorPackage
     ]
     ++ lib.optionals cfg.includeGoland [
-      pkgs.jetbrains-toolbox
-      pkgs.jetbrains.goland
+      pkgs.unstable.jetbrains-toolbox
+      pkgs.unstable.jetbrains.goland
     ];
 }

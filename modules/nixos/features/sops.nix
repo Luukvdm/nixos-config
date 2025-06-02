@@ -4,6 +4,7 @@
   lib,
   pkgs,
   hostSecretsDir,
+  username,
   ...
 }: let
   cfg = config.myNixOS.sops;
@@ -28,9 +29,9 @@ in {
 
     age = {
       # sshKeyPaths = ["${config.home.homeDirectory}/.ssh/${cfg.sshKeyDir}/id_ed25519"];
-      sshKeyPaths = ["/home/pengu/.ssh/${cfg.sshKeyDir}/id_ed25519"];
+      sshKeyPaths = ["/home/${username}/.ssh/${cfg.sshKeyDir}/id_ed25519"];
       # keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
-      keyFile = "/home/pengu/.config/sops/age/keys.txt";
+      keyFile = "/home/${username}/.config/sops/age/keys.txt";
       generateKey = true;
     };
   };

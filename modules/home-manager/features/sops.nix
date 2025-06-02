@@ -9,14 +9,6 @@
   hostSecretsDir = ../../../secrets;
 in {
   options.myHomeManager.sops = {
-    sshKeyDir = lib.mkOption {
-      type = with lib.types; str;
-      default = "nixos";
-      description = ''
-        Directory in ~/.ssh/ that holds the keys for sops.
-      '';
-    };
-
     secrets = lib.mkOption {
       type = lib.types.attrs;
       default = {};

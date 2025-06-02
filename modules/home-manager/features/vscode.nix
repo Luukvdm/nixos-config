@@ -14,17 +14,29 @@
     mutableExtensionsDir = false;
 
     profiles.default = {
-      extensions = with pkgs.vscode-extensions; [
-        vscodevim.vim
-        kamadorueda.alejandra
-        bbenoist.nix
-        editorconfig.editorconfig
-        mkhl.direnv
+      extensions = with pkgs.vscode-extensions;
+        [
+          vscodevim.vim
+          kamadorueda.alejandra
+          bbenoist.nix
+          editorconfig.editorconfig
+          mkhl.direnv
+          jdinhlife.gruvbox
 
-        jdinhlife.gruvbox
+          # go
+          golang.go
 
-        golang.go
-      ];
+          # python
+          ms-python.python
+          ms-python.debugpy
+          ms-pyright.pyright
+
+          # java
+          redhat.java
+        ]
+        ++ (with pkgs.unstable; [
+          charliermarsh.ruff
+        ]);
       enableUpdateCheck = false;
       enableExtensionUpdateCheck = false;
 
@@ -45,6 +57,8 @@
           "node_modules/" = true;
           "out/" = true;
           "vendor/" = true;
+          "**/__pycache__" = true;
+          "**/*.egg-info" = true;
         };
 
         "terminal.integrated.tabs.enabled" = true;

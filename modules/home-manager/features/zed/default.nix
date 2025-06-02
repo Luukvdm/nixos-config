@@ -6,6 +6,10 @@
 }: {
   programs.zed-editor = {
     enable = true;
+    extraPackages = with pkgs; [
+      ruff
+      pyright
+    ];
     extensions = [
       "html"
       "nix"
@@ -36,6 +40,9 @@
         diagnostics = false;
       };
       vim_mode = true;
+      vim = {
+        use_system_clipboard = "always";
+      };
       ui_font_family = "Cantarell";
       ui_font_size = 16;
       buffer_font_size = 16;
@@ -66,6 +73,27 @@
           formatter = {
             external = {
               command = "alejandra";
+            };
+          };
+        };
+        Python = {
+          format_on_save = "on";
+          language_servers = ["pyright" "ruff"];
+          formater = [
+            {
+              code_actions = {
+                source.fixAll.ruff = true;
+                source.organizeImports.ruff = true;
+              };
+            }
+          ];
+        };
+      };
+      lsp = {
+        ruff = {
+          initialization_options = {
+            settings = {
+              lineLength = 120;
             };
           };
         };

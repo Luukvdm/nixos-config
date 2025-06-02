@@ -16,7 +16,6 @@
 
   myNixOS = {
     bundles.general-desktop.enable = true;
-    bundles.gnome-desktop.enable = true;
     bundles.home-manager.enable = true;
     power-management.enable = false;
     sops = {
@@ -89,12 +88,12 @@
     python3
     gnumake
     gcc
-    skaffold
     protobuf
     protobufc
 
     spotify
     google-chat-linux
+    realvnc-vnc-viewer
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

@@ -10,11 +10,11 @@
     };
 
     shellAliases = {
-      tf = "terraform ";
+      tf = "tofu";
     };
 
     systemPackages = with pkgs; [
-      terraform
+      opentofu
       terraform-ls
       terraform-lsp
       terraform-docs

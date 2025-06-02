@@ -15,7 +15,6 @@
     bundles.gnome-desktop.enable = true;
     sops = {
       enable = true;
-      sshKeyDir = "sops";
       keyPaths = ["/home/${username}/.ssh/sops/id_ed25519"];
       keyFile = "/home/${username}/.config/sops/age/keys.txt";
       secrets = {

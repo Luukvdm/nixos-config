@@ -14,7 +14,8 @@
     bundles.gnome-desktop.enable = true;
     sops = {
       enable = true;
-      sshKeyDir = "sops";
+      keyPaths = ["/home/${username}/.ssh/sops/id_ed25519"];
+      keyFile = "/home/${username}/.config/sops/age/keys.txt";
       secrets = {
         githubUser = {
           sopsFile = ../../secrets/github.ini;
@@ -60,8 +61,13 @@
       insomnia
       glab
       awscli2
-      # (google-cloud-sdk.withExtraComponents [google-cloud-sdk.components.gke-gcloud-auth-plugin])
-      # google-cloud-sdk-gce
+      azure-cli
+      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
+        gke-gcloud-auth-plugin
+        gcloud-man-pages
+        cloud-run-proxy
+      ]))
+      hcloud
     ];
   };
 }
