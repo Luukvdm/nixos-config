@@ -1,12 +1,11 @@
 keys:
-- &thinkpad age17sv6eash2cv2ljt57pzg5gua74zr9lks3nyggsp32n628malj96surg2h3
+# - &thinkpad age17sv6eash2cv2ljt57pzg5gua74zr9lks3nyggsp32n628malj96surg2h3
 - &work age1s2wumhh0hcsgvppfx0awla06rsycvgassyqt0ynajtagmmmjfshstfausp
 - &desktop age15tpxdvpenwrklugejlmc4tzwhphytyjmqq74esrjnkmfpsnxldwsud63fh
 creation_rules:
 - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
   key_groups:
   - age:
-    - *thinkpad
     - *work
     - *desktop
 - path_regex: secrets/sue/[^/]+\.(yaml|json|env|ini)$
