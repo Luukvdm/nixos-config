@@ -25,6 +25,7 @@
     steam.enable = true;
     rgb.enable = true;
     k8s-tools.enable = true;
+    keychron.enable = true;
 
     userConfig = ./home.nix;
     user = {

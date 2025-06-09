@@ -35,6 +35,7 @@
       enable = true;
       includeRider = true;
     };
+    keychron.enable = true;
 
     userConfig = ./home.nix;
     user = {
