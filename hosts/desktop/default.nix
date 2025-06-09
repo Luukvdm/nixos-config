@@ -27,6 +27,9 @@
     k8s-tools.enable = true;
 
     userConfig = ./home.nix;
+    user = {
+      extraGroups = ["networkmanager" "docker"];
+    };
   };
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];

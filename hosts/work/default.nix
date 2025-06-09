@@ -37,6 +37,9 @@
     };
 
     userConfig = ./home.nix;
+    user = {
+      extraGroups = ["networkmanager" "docker"];
+    };
   };
 
   boot = {
