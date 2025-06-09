@@ -4,7 +4,7 @@
   ...
 }: {
   environment = {
-    systemPackages = with pkgs; [btop neovim];
+    systemPackages = with pkgs; [btop];
 
     # etc = {
     #   "flatpak/remotes.d/flathub.flatpakrepo".source = pkgs.fetchurl {

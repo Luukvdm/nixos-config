@@ -8,7 +8,7 @@
     fonts.enable = true;
   };
 
-  environment.systemPackages = with pkgs; [btop neovim vlc];
+  environment.systemPackages = with pkgs; [btop vlc];
   programs = {
     git = {
       enable = true;
