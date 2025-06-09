@@ -3,6 +3,7 @@
   config,
   lib,
   inputs,
+  username,
   ...
 }: let
   cfg = config.myHomeManager.sops;
@@ -19,7 +20,7 @@ in {
 
     keyFile = lib.mkOption {
       type = with lib.types; str;
-      default = "~/.config/sops/age/keys.txt";
+      default = "/home/${username}/.config/sops/age/keys.txt";
       description = ''
       '';
     };
