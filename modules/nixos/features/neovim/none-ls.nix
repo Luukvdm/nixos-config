@@ -30,9 +30,8 @@
           formatting = {
             alejandra.enable = true;
             black.enable = true;
-            # d2_fmt.enable = true;
+            d2_fmt.enable = true;
             pg_format.enable = true;
-            # rego.enable = true;
             rego.enable = false;
             yamlfmt = {
               enable = true;

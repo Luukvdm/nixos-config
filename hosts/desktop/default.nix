@@ -21,6 +21,7 @@
       sshKeyDir = "sops";
     };
     gnome.enable = true;
+    neovim.enable = true;
     steam.enable = true;
     rgb.enable = true;
     k8s-tools.enable = true;

@@ -33,7 +33,6 @@
     };
     nix-direnv.enable = true;
     tilix.enable = true;
-    neovim.enable = true;
     zed.enable = true;
     xdg.enable = true;
     gtk.enable = false;

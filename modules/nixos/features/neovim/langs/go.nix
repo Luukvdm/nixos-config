@@ -4,34 +4,39 @@
   lib,
   ...
 }: let
-  gocfg = config.myHomeManager.go;
-  cfg = config.myHomeManager.neovim.go;
+  # gocfg = config.myNixOS.go;
+  cfg = config.myNixOS.neovim.go;
 in {
-  options.myHomeManager.neovim.go = {
+  options.myNixOS.neovim.go = {
     enable = lib.mkOption {
-      default = gocfg.enable;
+      # default = gocfg.enable;
+      default = true;
       example = true;
       description = "Whether to enable the Neovim Golang config.";
       type = lib.types.bool;
     };
     goPackage = lib.mkOption {
       type = lib.types.package;
-      default = gocfg.package;
+      # default = gocfg.package;
+      default = pkgs.unstable.go_1_24;
       description = "The Go package to use.";
     };
     gotoolsPackage = lib.mkOption {
       type = lib.types.package;
-      default = gocfg.gotoolsPackage;
+      # default = gocfg.gotoolsPackage;
+      default = pkgs.unstable.gotools;
       description = "The gotools package to use.";
     };
     gofumptPackage = lib.mkOption {
       type = lib.types.package;
-      default = gocfg.gofumptPackage;
+      # default = gocfg.gofumptPackage;
+      default = pkgs.unstable.gofumpt;
       description = "The gofumpt package to use.";
     };
     goimportsRevisorPackage = lib.mkOption {
       type = lib.types.package;
-      default = gocfg.importsRevisorPackage;
+      # default = gocfg.importsRevisorPackage;
+      default = pkgs.unstable.goimports-reviser;
       description = "The goimports-reviser package to use.";
     };
   };

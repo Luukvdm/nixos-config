@@ -5,12 +5,8 @@
   pkgs,
   ...
 }: {
-  # I would like to have the neovim config in the nixos modules.
-  # But I can't get the nixpkgs overwrite to work :(.
   imports = [
-    # overwrite nixpkgs with unstable branch
-    # ({...} @ args: (inputs.nixvim.homeManagerModules.nixvim (args // {pkgs = pkgs.unstable;})))
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.nixosModules.nixvim
 
     ./cmp.nix
     ./lsp.nix
@@ -23,16 +19,10 @@
     ./langs/go.nix
   ];
 
-  home = {
-    shellAliases = {
-      vim = "nvim ";
-    };
-  };
-
   programs.nixvim = {
     enable = true;
+    colorschemes.gruvbox.enable = true;
     globals.mapleader = "\\";
-    clipboard.providers.wl-copy.enable = true;
 
     opts = {
       conceallevel = 0;
@@ -45,7 +35,7 @@
       swapfile = false;
       termguicolors = true;
       undofile = true;
-      updatetime = 300;
+      updatetime = 100;
       writebackup = false;
       expandtab = true;
       shiftwidth = 2;
@@ -54,9 +44,15 @@
       relativenumber = true;
       wrap = false;
       background = "dark";
+
+      completeopt = ["menu" "menuone" "noselect"]; # For CMP plugin
     };
 
-    colorschemes.gruvbox.enable = true;
+    clipboard = {
+      register = "unnamedplus";
+      providers.wl-copy.enable = true;
+    };
+
     editorconfig = {
       enable = true;
     };
@@ -74,6 +70,7 @@
       # lspsaga.enable = true;
       nvim-tree = {
         enable = true;
+        autoReloadOnWrite = true;
       };
       nix = {
         enable = true;

@@ -23,6 +23,7 @@
       sshKeyDir = "sops";
     };
     gnome.enable = true;
+    neovim.enable = true;
     docker.enable = true;
     k8s-tools.enable = true;
     terraform.enable = true;
