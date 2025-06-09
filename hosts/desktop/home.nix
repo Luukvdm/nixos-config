@@ -12,7 +12,6 @@
   myHomeManager = {
     username = username;
     bundles.general.enable = true;
-    bundles.gnome-desktop.enable = true;
     sops = {
       enable = true;
       keyPaths = ["/home/${username}/.ssh/sops/id_ed25519"];

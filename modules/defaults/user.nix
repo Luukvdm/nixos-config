@@ -32,16 +32,25 @@ in {
       type = with lib.types; types.package;
       default = pkgs.zsh;
     };
+
+    userNixosSettings = lib.mkOption {
+      default = {};
+      description = ''
+        NixOS user settings
+      '';
+    };
   };
 
   config = {
-    users.users."${cfg.username}" = {
-      hashedPassword = cfg.hashedPassword;
-      initialPassword = "@Welcome01";
-      isNormalUser = true;
-      home = "/home/${cfg.username}";
-      extraGroups = ["wheel"] ++ cfg.extraGroups;
-      shell = cfg.shell;
-    };
+    users.users."${cfg.username}" =
+      {
+        hashedPassword = cfg.hashedPassword;
+        initialPassword = "@Welcome01";
+        isNormalUser = true;
+        home = "/home/${cfg.username}";
+        extraGroups = ["wheel"] ++ cfg.extraGroups;
+        shell = cfg.shell;
+      }
+      // cfg.userNixosSettings;
   };
 }

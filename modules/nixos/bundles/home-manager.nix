@@ -33,6 +33,7 @@ in {
       extraSpecialArgs = {
         inherit inputs myLib hostSecretsDir username;
         outputs = inputs.self.outputs;
+        sharedSettings = cfg.sharedSettings;
       };
       sharedModules = [
         inputs.sops-nix.homeManagerModules.sops
@@ -44,6 +45,14 @@ in {
             (import cfg.userConfig)
             outputs.homeManagerModules.default
           ];
+
+          myHomeManager = {
+            gnome.enable = lib.mkDefault cfg.gnome.enable;
+            xdg.enable = lib.mkDefault cfg.gnome.enable;
+            phinger-cursors.enable = lib.mkDefault cfg.gnome.enable;
+            # tilix.enable = lib.mkDefault cfg.gnome.enable;
+            # firefox.enable = lib.mkDefault cfg.gnome.enable;
+          };
         };
       };
     };
