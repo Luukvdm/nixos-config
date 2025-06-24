@@ -18,7 +18,7 @@
         "com.gexperts.Tilix.desktop"
         "org.gnome.Nautilus.desktop"
         "spotify.desktop"
-        "firefox-developer-edition.desktop"
+        "firefox-devedition.desktop"
         "goland.desktop"
       ];
       enabled-extensions = [
