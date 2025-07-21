@@ -1,8 +1,25 @@
-{pkgs, ...}: {
-  programs.nixvim = {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.myNixOS.neovim;
+in {
+  options.myNixOS.neovim = {
+    enableLsp = lib.mkOption {
+      # default = gocfg.enable;
+      default = true;
+      example = true;
+      description = "Whether to enable LSP.";
+      type = lib.types.bool;
+    };
+  };
+
+  config.programs.nixvim = {
     plugins = {
       lsp = {
-        enable = true;
+        enable = cfg.enableLsp;
         # onAttach
         servers = {
           bashls.enable = true;

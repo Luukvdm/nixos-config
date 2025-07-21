@@ -1,8 +1,24 @@
-{...}: {
-  programs.nixvim = {
+{
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.myNixOS.neovim;
+in {
+  options.myNixOS.neovim = {
+    enableNoneLs = lib.mkOption {
+      # default = gocfg.enable;
+      default = true;
+      example = true;
+      description = "Whether to enable None-LS.";
+      type = lib.types.bool;
+    };
+  };
+
+  config.programs.nixvim = {
     plugins = {
       none-ls = {
-        enable = true;
+        enable = cfg.enableNoneLs;
         # onAttach = ''
         #   function(client, bufnr)
         #       if client.supports_method "textDocument/formatting" then

@@ -8,8 +8,8 @@
     enable = true;
     settings = {
       X11Forwarding = lib.mkDefault true;
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
+      PermitRootLogin = lib.mkDefault "no";
+      PasswordAuthentication = lib.mkDefault false;
     };
     openFirewall = lib.mkDefault true;
   };

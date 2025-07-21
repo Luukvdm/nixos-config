@@ -4,17 +4,18 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  cfg = config.myNixOS.neovim;
+in {
   imports = [
     inputs.nixvim.nixosModules.nixvim
 
     ./cmp.nix
-    ./lsp.nix
     ./telescope.nix
-    ./treesitter.nix
-    ./none-ls.nix
-
     ./keymaps.nix
+    ./lsp.nix
+    ./none-ls.nix
+    ./treesitter.nix
 
     ./langs/go.nix
   ];

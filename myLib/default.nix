@@ -4,6 +4,7 @@
 in rec {
   mkSystem = host: {
     system ? "x86_64-linux",
+    buildSystem ? "x86_64-linux",
     defaultUsername ? "luuk",
     description ? "",
     extraModules ? [],
@@ -25,6 +26,7 @@ in rec {
           ({config, ...}: {
             nixpkgs = {
               hostPlatform = system;
+              buildPlatform = buildSystem;
             };
           })
 
@@ -36,6 +38,49 @@ in rec {
         ]
         ++ extraModules;
     };
+
+  mkKubernetesCluster = hosts: domain: kubeMasterIp:
+    builtins.concatMap (host: [
+      {
+        name = host.name;
+        value = myLib.mkSystem "${host.configName}" {
+          system = host.system;
+
+          # extraHosts = nixpkgs.lib.concatMapStringsSep "\n" (h: "${h.ip} ${h.hostName}.${domain}") (nixpkgs.lib.lists.remove host k8s-hosts);
+          extraModules =
+            [
+              ({
+                config,
+                lib,
+                ...
+              }: {
+                myNixOS = {
+                  # k8s = {
+                  #   kubeMasterIp = "192.168.2.20";
+                  # };
+                  #
+                  networkd = {
+                    enable = true;
+                    hostname = host.hostName;
+                    domain = "kube";
+                    extraHosts = lib.concatMap (h: "${h.ip} ${h.hostName}.${domain}") (lib.lists.remove host hosts);
+                    staticIp = host.ip;
+                    staticGateway = "192.168.2.254";
+                  };
+                };
+              })
+            ]
+            ++ host.extraModules;
+        };
+      }
+    ])
+    hosts;
+
+  # unfreePkgs = import inputs.nixpkgs {
+  #   # system = inherit inputs.nixpkgs.system;
+  #   config.allowUnfree = inputs.nixpkgs.lib.mkDefault true;
+  # };
+  # pkgsFor = system: unfreePkgs.legacyPackages.${system};
 
   filesIn = dir: (map (fname: dir + "/${fname}")
     (builtins.attrNames (builtins.readDir dir)));

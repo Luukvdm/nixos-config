@@ -1,1 +1,5 @@
 result
+.direnv
+
+nixos.img
+uboot.img
