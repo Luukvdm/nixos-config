@@ -56,8 +56,9 @@
     stateVersion = "25.05";
 
     packages = with pkgs; [
-      insomnia
+      ungoogled-chromium
       glab
+
       awscli2
       azure-cli
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
