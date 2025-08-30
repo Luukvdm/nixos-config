@@ -8,7 +8,7 @@ in {
   options.myNixOS.neovim = {
     enableNoneLs = lib.mkOption {
       # default = gocfg.enable;
-      default = true;
+      default = false;
       example = true;
       description = "Whether to enable None-LS.";
       type = lib.types.bool;
@@ -17,6 +17,7 @@ in {
 
   config.programs.nixvim = {
     plugins = {
+      lsp.servers.nil_ls.enable = false;
       none-ls = {
         enable = cfg.enableNoneLs;
         # onAttach = ''
