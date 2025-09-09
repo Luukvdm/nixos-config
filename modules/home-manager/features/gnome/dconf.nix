@@ -11,7 +11,7 @@
       dynamic-workspaces = true;
       edge-tiling = true;
       workspaces-only-on-primary = true;
-      experimental-features = ["scale-monitor-framebuffer"];
+      experimental-features = ["scale-monitor-framebuffer" "xwayland-native-scaling"];
     };
     "org/gnome/shell" = {
       favorite-apps = [
