@@ -57,7 +57,7 @@
   };
 
   networking = {
-    hostName = "nixos";
+    hostName = "aa2129-luuk";
     networkmanager = {
       enable = true;
     };
