@@ -20,6 +20,10 @@ in {
     daemon = {
       enable = true;
     };
+    scanner = {
+      enable = true;
+      interval = "*-*-* 12:30:00";
+    };
     updater = {
       enable = true;
     };
