@@ -96,6 +96,7 @@
     protobuf
     protobufc
 
+    claude-code
     spotify
     google-chat-linux
     realvnc-vnc-viewer
