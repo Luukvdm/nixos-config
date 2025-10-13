@@ -22,7 +22,7 @@ in {
     };
     scanner = {
       enable = true;
-      interval = "*-*-* 12:30:00";
+      interval = "Fri *-*-* 17:00:00";
     };
     updater = {
       enable = true;
