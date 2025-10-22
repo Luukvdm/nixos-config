@@ -58,15 +58,6 @@
     packages = with pkgs; [
       ungoogled-chromium
       glab
-
-      awscli2
-      azure-cli
-      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
-        gke-gcloud-auth-plugin
-        gcloud-man-pages
-        cloud-run-proxy
-      ]))
-      hcloud
     ];
   };
 }

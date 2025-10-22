@@ -26,6 +26,7 @@
     neovim.enable = true;
     docker.enable = true;
     k8s-tools.enable = true;
+    cloud.enable = true;
     terraform.enable = true;
     clamav = {
       enable = true;
