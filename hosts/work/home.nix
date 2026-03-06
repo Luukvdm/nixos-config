@@ -34,7 +34,12 @@
     git = {
       enable = true;
       mainUserFile = config.sops.secrets.githubUser.path;
-      sueUserFile = config.sops.secrets.sueUser.path;
+      extraIncludes = [
+        {
+          condition = "gitdir:${config.home.homeDirectory}/code/sue/";
+          path = config.sops.secrets.sueUser.path;
+        }
+      ];
     };
     go = {
       enable = true;

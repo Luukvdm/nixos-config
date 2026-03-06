@@ -14,12 +14,9 @@ in {
         git config for the primary user
       '';
     };
-    sueUserFile = lib.mkOption {
-      type = with lib.types; either str path;
-      default = "";
-      description = ''
-        git config for the sue user
-      '';
+    extraIncludes = lib.mkOption {
+      type = with lib.types; types.listOf types.attrs;
+      default = [];
     };
   };
 
@@ -47,12 +44,12 @@ in {
           path = cfg.mainUserFile;
         }
       ]
-      ++ lib.lists.optional (cfg.sueUserFile != "") {
-        condition = "gitdir:${homeCfg.homeDirectory}/code/sue/";
-        path = cfg.sueUserFile;
-      };
+      ++ cfg.extraIncludes;
     extraConfig = {
-      core.editor = "nvim";
+      core = {
+        editor = "nvim";
+        sshCommand = "ssh";
+      };
       # diff.tool = "difft --skip-unchanged";# "vimdiff";
       difftool.prompt = false;
       merge = {
