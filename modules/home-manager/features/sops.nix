@@ -20,7 +20,7 @@ in {
 
     keyFile = lib.mkOption {
       type = with lib.types; str;
-      default = "/home/${username}/.config/sops/age/keys.txt";
+      default = "${config.xdg.configHome}/sops/age/keys.txt";
       description = ''
       '';
     };

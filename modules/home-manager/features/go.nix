@@ -44,9 +44,11 @@ in {
   programs.go = {
     enable = true;
     package = cfg.package;
-    goPath = ".local/share/go";
-    goBin = ".local/share/go/bin";
-    goPrivate = ["gitlab.com/suecode"];
+    env = {
+      GOPRIVATE = ["gitlab.com/suecode"];
+      GOBIN = ".local/share/go/bin";
+      GOPATH = ".local/share/go";
+    };
     # packages = {
     #   "golang.org/x/tools/cmd/goimports" = builtins.fetchGit "https://go.googlesource.com/tools";
     #   "golang.org/x/tools/cmd/fiximports" = builtins.fetchGit "https://go.googlesource.com/tools";

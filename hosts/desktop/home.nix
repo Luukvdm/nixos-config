@@ -44,7 +44,7 @@
   home = {
     username = username;
     homeDirectory = lib.mkDefault "/home/${username}";
-    stateVersion = "25.05";
+    stateVersion = lib.trivial.release;
 
     packages = with pkgs; [
     ];

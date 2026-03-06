@@ -91,33 +91,31 @@ in {
         enable = false;
         user = username;
       };
+      gdm = {
+        enable = true;
+        wayland = true;
+        /*
+        autoLogin = {
+          delay = 1;
+        };
+        settings = {
+          daemon = {
+            AutomaticLoginEnable = "True";
+            AutomaticLogin = cfg.userName;
+          };
+        };
+        */
+      };
+    };
+    desktopManager.gnome = {
+      enable = true;
+      # extraGSettingsOverridePackages = [
+      # pkgs.nautilus-open-any-terminal
+      # ];
     };
 
     xserver = {
       enable = true;
-      displayManager = {
-        gdm = {
-          enable = true;
-          wayland = true;
-          /*
-          autoLogin = {
-            delay = 1;
-          };
-          settings = {
-            daemon = {
-              AutomaticLoginEnable = "True";
-              AutomaticLogin = cfg.userName;
-            };
-          };
-          */
-        };
-      };
-      desktopManager.gnome = {
-        enable = true;
-        # extraGSettingsOverridePackages = [
-        # pkgs.nautilus-open-any-terminal
-        # ];
-      };
     };
   };
 

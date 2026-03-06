@@ -71,7 +71,9 @@ in {
       # lspsaga.enable = true;
       nvim-tree = {
         enable = true;
-        autoReloadOnWrite = true;
+        settings = {
+          auto_reload_on_write = true;
+        };
       };
       nix = {
         enable = true;

@@ -15,7 +15,7 @@
 
   programs.zsh = {
     enable = true;
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     # history.path = "${config.xdg.dataHome}/zsh/zsh_history";
     autocd = true;
     autosuggestion.enable = true;
