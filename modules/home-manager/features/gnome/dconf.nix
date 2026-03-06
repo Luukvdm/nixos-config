@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   dconf.settings = {
@@ -57,7 +58,7 @@
       theme-name = "freedesktop";
     };
     "org/gnome/desktop/session" = {
-      idle-delay = 0;
+      idle-delay = lib.hm.gvariant.mkUint32 0;
     };
     "org/gnome/desktop/default-application/terminal" = {
       exec = "tilix";
@@ -86,7 +87,7 @@
       night-light-enabled = true;
       night-light-schedule-automatic = true;
       # night-light-last-coordinates = (51.592, 4.780);
-      night-light-temperature = "uint32 2632";
+      night-light-temperature = lib.hm.gvariant.mkUint32 2632;
     };
     # "org/gnome/desktop/background" = {
     #   picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/vnc-l.png";
