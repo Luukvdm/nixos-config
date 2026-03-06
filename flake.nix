@@ -28,6 +28,15 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-wallpaper = {
+      url = "github:lunik1/nix-wallpaper";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        # flake-utils.follows = "flake-utils";
+        # pre-commit-hooks.follows = "git-hooks";
+      };
+    };
   };
 
   outputs = {

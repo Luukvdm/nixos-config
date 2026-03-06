@@ -42,6 +42,7 @@
     };
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+      accent-color = "orange";
       enable-hot-corners = false;
       font-name = "Cantarell 11";
       document-font-name = "Cantarell 11";
@@ -89,14 +90,5 @@
       # night-light-last-coordinates = (51.592, 4.780);
       night-light-temperature = lib.hm.gvariant.mkUint32 2632;
     };
-    # "org/gnome/desktop/background" = {
-    #   picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/vnc-l.png";
-    #   picture-uri-dark = "file:///run/current-system/sw/share/backgrounds/gnome/vnc-d.png";
-    # };
-    # "org/gnome/desktop/screensaver" = {
-    #   picture-uri = "file:///run/current-system/sw/share/backgrounds/gnome/vnc-d.png";
-    #   primary-color = "#3465a4";
-    #   secondary-color = "#000000";
-    # };
   };
 }
