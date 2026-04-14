@@ -9,7 +9,7 @@ in {
   options.myHomeManager.go = {
     package = lib.mkOption {
       type = with lib.types; types.package;
-      default = pkgs.unstable.go_1_25;
+      default = pkgs.unstable.go_1_26;
       description = "The Go package to use.";
     };
     gotoolsPackage = lib.mkOption {
@@ -44,10 +44,12 @@ in {
   programs.go = {
     enable = true;
     package = cfg.package;
-    env = {
+    env = let
+      inherit (config.home) homeDirectory;
+    in {
       GOPRIVATE = ["gitlab.com/suecode"];
-      GOBIN = ".local/share/go/bin";
-      GOPATH = ".local/share/go";
+      GOBIN = "${homeDirectory}/.local/share/go/bin";
+      GOPATH = "${homeDirectory}/.local/share/go";
     };
     # packages = {
     #   "golang.org/x/tools/cmd/goimports" = builtins.fetchGit "https://go.googlesource.com/tools";

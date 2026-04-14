@@ -18,7 +18,7 @@ in {
     goPackage = lib.mkOption {
       type = lib.types.package;
       # default = gocfg.package;
-      default = pkgs.unstable.go_1_24;
+      default = pkgs.unstable.go_1_26;
       description = "The Go package to use.";
     };
     gotoolsPackage = lib.mkOption {
