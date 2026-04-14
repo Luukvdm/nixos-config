@@ -12,9 +12,16 @@ in {
   options.myNixOS.sops = {
     sshKeyDir = lib.mkOption {
       type = with lib.types; str;
-      default = "nixos";
+      default = "sops";
       description = ''
         Directory in ~/.ssh/ that holds the keys for sops.
+      '';
+    };
+    secrets = lib.mkOption {
+      type = lib.types.attrs;
+      default = {};
+      description = ''
+        Secrets to decrypt.
       '';
     };
   };
@@ -34,11 +41,15 @@ in {
       keyFile = "/home/${username}/.config/sops/age/keys.txt";
       generateKey = true;
     };
+
+    secrets = cfg.secrets;
   };
 
-  environment.systemPackages = with pkgs; [
-    sops
-    age
-    ssh-to-age
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      sops
+      age
+      ssh-to-age
+    ];
+  };
 }

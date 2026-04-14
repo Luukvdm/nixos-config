@@ -20,12 +20,17 @@
       enable = true;
       sshKeyDir = "sops";
     };
+    networking = {
+      enable = true;
+      hostname = "desktop";
+    };
     gnome.enable = true;
     neovim.enable = true;
     steam.enable = true;
     rgb.enable = true;
     k8s-tools.enable = true;
     keychron.enable = true;
+    docker.enable = true;
 
     userConfig = ./home.nix;
     user = {
@@ -39,13 +44,6 @@
       systemd-boot.enable = true;
       systemd-boot.configurationLimit = 10;
       efi.canTouchEfiVariables = true;
-    };
-  };
-
-  networking = {
-    hostName = "desktop";
-    networkmanager = {
-      enable = true;
     };
   };
 

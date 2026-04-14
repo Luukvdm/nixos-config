@@ -52,6 +52,6 @@ in {
       };
     };
 
-    system.stateVersion = lib.trivial.release;
+    system.stateVersion = lib.mkDefault lib.trivial.release;
   };
 }

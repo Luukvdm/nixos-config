@@ -3,7 +3,19 @@
   lib,
   pkgs,
   ...
-}: {
+}: let
+  cfg = config.myNixOS.k8s-tools;
+in {
+  options.myNixOS.k8s-tools = {
+    installPackages = lib.mkOption {
+      type = with lib.types; bool;
+      default = true;
+      description = ''
+        Wether to install k8s tool packages.
+      '';
+    };
+  };
+
   environment = {
     shellAliases = {
       k = "kubectl ";
@@ -17,13 +29,15 @@
     };
     */
 
-    systemPackages = with pkgs; [
-      kubectl
-      kubectx
-      kustomize
-      kubernetes-helm
-      kind
-      k9s
-    ];
+    systemPackages = with pkgs;
+      [
+      ]
+      ++ lib.optionals cfg.installPackages [
+        kubectl
+        k9s
+        kubectx
+        kustomize
+        kubernetes-helm
+      ];
   };
 }

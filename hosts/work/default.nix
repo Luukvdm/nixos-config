@@ -22,6 +22,10 @@
       enable = true;
       sshKeyDir = "sops";
     };
+    networking = {
+      enable = true;
+      hostname = "aa2129-luuk";
+    };
     gnome.enable = true;
     neovim.enable = true;
     docker.enable = true;
@@ -57,20 +61,6 @@
     };
   };
 
-  networking = {
-    hostName = "aa2129-luuk";
-    networkmanager = {
-      enable = true;
-    };
-    nftables = {
-      enable = true;
-    };
-    firewall = {
-      enable = true;
-      pingLimit = "1/minute burst 5 packets";
-    };
-  };
-
   services.fwupd.enable = true;
   services.printing.enable = true;
 
@@ -96,6 +86,7 @@
     gcc
     protobuf
     protobufc
+    kind
 
     claude-code
     spotify

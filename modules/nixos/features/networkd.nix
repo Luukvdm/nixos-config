@@ -75,14 +75,11 @@ in {
   };
 
   networking = {
-    firewall.enable = true;
     useDHCP = false; # !builtins.hasContext cfg.staticIp;
     useNetworkd = lib.mkDefault true;
-    hostName = cfg.hostname;
-    domain = cfg.domain;
 
     networkmanager = {
-      enable = false;
+      enable = lib.mkForce false;
     };
   };
 }

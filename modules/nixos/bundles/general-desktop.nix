@@ -5,6 +5,7 @@
   ...
 }: {
   myNixOS = {
+    networking.enable = true;
     locale.enable = true;
     fonts.enable = true;
   };
