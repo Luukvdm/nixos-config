@@ -16,8 +16,22 @@
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
+    };
+  };
+  cross-packages = final: _prev: {
+    cross = import inputs.nixpkgs {
+      system = final.stdenv.hostPlatform.system;
+      buildPlatform = final.stdenv.buildPlatform.system; # "x86_64-linux";
+      config = {
+        allowUnfree = true;
+        allowUnfreePredicate = pkg:
+          builtins.elem (inputs.nixpkgs.lib.getName pkg) [
+            # nixpkgs.ubootTuringRK1 includes proprietary binaries from Rockchip
+            "ubootTuringRK1"
+          ];
+      };
     };
   };
 }

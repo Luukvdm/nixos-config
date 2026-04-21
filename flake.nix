@@ -52,7 +52,7 @@
     inherit (self) outputs;
 
     myLib = import ./myLib/default.nix {inherit inputs;};
-    # hostSecretsDir = self + "/secrets";
+    hostSecretsDir = self + "./secrets";
 
     systems = [
       "x86_64-linux"
@@ -64,6 +64,24 @@
     #   pkgs = import nixpkgs { inherit system; };
     # });
 
+    deployPkgs = forAllSystems (
+      system: let
+        pkgs = import nixpkgs {inherit system;};
+      in
+        import nixpkgs {
+          inherit system;
+          overlays = [
+            deploy-rs.overlays.default
+            (final: prev: {
+              deploy-rs = {
+                inherit (pkgs) deploy-rs;
+                lib = prev.deploy-rs.lib;
+              };
+            })
+          ];
+        }
+    );
+
     turingRk1Pkgs = import nixpkgs {
       system = "aarch64-linux";
       config.allowUnfreePredicate = pkg:
@@ -73,12 +91,13 @@
         ];
     };
 
+    kubeMasterIp = "192.168.2.12";
     k8s-hosts = [
       {
         name = "worker01";
         configName = "turing-rk1/k8s-worker";
         system = "aarch64-linux";
-        hostName = "worker01";
+        hostname = "worker01";
         ip = "192.168.2.9";
         extraModules = [];
       }
@@ -86,7 +105,7 @@
         name = "worker02";
         configName = "turing-rk1/k8s-worker";
         system = "aarch64-linux";
-        hostName = "worker02";
+        hostname = "worker02";
         ip = "192.168.2.10";
         extraModules = [];
       }
@@ -94,7 +113,7 @@
         name = "worker03";
         configName = "turing-rk1/k8s-worker";
         system = "aarch64-linux";
-        hostName = "worker03";
+        hostname = "worker03";
         ip = "192.168.2.11";
         extraModules = [];
       }
@@ -102,8 +121,8 @@
         name = "control01";
         configName = "turing-rk1/k8s-control";
         system = "aarch64-linux";
-        hostName = "api";
-        ip = "192.168.2.12";
+        hostname = "api";
+        ip = kubeMasterIp;
         extraModules = [];
       }
     ];
@@ -113,7 +132,7 @@
     overlays = import ./overlays {inherit inputs;};
 
     nixosConfigurations = builtins.listToAttrs (
-      myLib.mkKubernetesCluster k8s-hosts "kube" "192.168.2.20"
+      myLib.mkKubernetesCluster k8s-hosts "kube" kubeMasterIp
       # append regular systems
       ++ [
         {
@@ -125,6 +144,12 @@
         {
           name = "work";
           value = myLib.mkSystem "work" {
+            system = "x86_64-linux";
+          };
+        }
+        {
+          name = "home-server";
+          value = myLib.mkSystem "home-server" {
             system = "x86_64-linux";
           };
         }
@@ -146,17 +171,37 @@
             hostname = host.ip;
             sshUser = "luuk";
             user = "root";
-            autoRollback = false;
-            magicRollback = false;
-            # profiles.system.path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.${host.configName};
-            profiles.system.path = deploy-rs.lib.${host.system}.activate.nixos self.nixosConfigurations.${host.name};
+            # autoRollback = false;
+            # magicRollback = false;
+            # profiles.system.path = deploy-rs.lib.${host.system}.activate.nixos self.nixosConfigurations.${host.name};
+            profiles.system.path = deployPkgs.${host.system}.deploy-rs.lib.activate.nixos self.nixosConfigurations.${host.name};
+
+            activationTimeout = 600;
+            confirmTimeout = 60;
+
+            remoteBuild = true;
+          };
+        }
+      ])
+      k8s-hosts
+      ++ [
+        {
+          name = "home-server";
+          value = {
+            hostname = "192.168.2.13";
+            sshUser = "luuk";
+            user = "root";
+            # autoRollback = false;
+            # magicRollback = false;
+            profiles = {
+              system.path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.home-server;
+            };
 
             activationTimeout = 600;
             confirmTimeout = 60;
           };
         }
-      ])
-      k8s-hosts);
+      ]);
 
     images.turing-rk1 = nixosConfigurations.turing-rk1-base.config.system.build.sdImage;
     # packages."x86_64-linux".google-chat-linux = (myLib.pkgsFor "x86_64-linux").callPackage ./pkgs/google-chat-linux.nix {};
@@ -218,7 +263,7 @@
               # make-certs
             ]
             ++ [
-              inputs.deploy-rs.packages.${system}.deploy-rs
+              inputs.deploy-rs.packages.${pkgs.stdenv.hostPlatform.system}.deploy-rs
             ];
 
           shellHook = ''

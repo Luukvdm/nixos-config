@@ -23,11 +23,17 @@ in {
 
   myNixOS = {
     bundles.general-headless.enable = true;
+
     networkd = {
       enable = true;
       hostname = "turing-rk1";
       domain = "kube";
       staticIp = "";
+    };
+    networking = {
+      enable = true;
+      hostname = "turing-rk1";
+      domain = "kube";
     };
     neovim = {
       enable = false;
@@ -38,7 +44,7 @@ in {
     };
 
     user = {
-      extraGroups = ["networkmanager"];
+      extraGroups = ["networkmanager" "docker"];
       shell = pkgs.bash;
     };
   };

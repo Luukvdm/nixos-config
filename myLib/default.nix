@@ -8,8 +8,9 @@ in rec {
     defaultUsername ? "luuk",
     description ? "",
     extraModules ? [],
+    nixpkgs ? "nixpkgs",
   }:
-    inputs.nixpkgs.lib.nixosSystem {
+    inputs.${nixpkgs}.lib.nixosSystem {
       inherit system;
 
       specialArgs = {
@@ -44,9 +45,10 @@ in rec {
       {
         name = host.name;
         value = myLib.mkSystem "${host.configName}" {
+          nixpkgs = "nixpkgs";
           system = host.system;
+          # buildSystem = buildSystem;
 
-          # extraHosts = nixpkgs.lib.concatMapStringsSep "\n" (h: "${h.ip} ${h.hostName}.${domain}") (nixpkgs.lib.lists.remove host k8s-hosts);
           extraModules =
             [
               ({
@@ -54,16 +56,30 @@ in rec {
                 lib,
                 ...
               }: {
+                nixpkgs = {
+                  overlays = [
+                    outputs.overlays.cross-packages
+                  ];
+                };
                 myNixOS = {
-                  # k8s = {
-                  #   kubeMasterIp = "192.168.2.20";
-                  # };
-                  #
+                  k8s = {
+                    kubeMasterIp = kubeMasterIp;
+                    hostIp = host.ip;
+                  };
+
+                  networking = {
+                    enable = true;
+                    hostname = host.hostname;
+                    domain = "kube";
+                    extraHosts = lib.concatMap (h: ["${h.ip} ${h.hostname}.${domain}"]) (lib.lists.remove host hosts);
+                    enableFirewall = lib.mkDefault false;
+                    enableNftables = lib.mkDefault false;
+                  };
                   networkd = {
                     enable = true;
-                    hostname = host.hostName;
+                    hostname = host.hostname;
                     domain = "kube";
-                    extraHosts = lib.concatMap (h: "${h.ip} ${h.hostName}.${domain}") (lib.lists.remove host hosts);
+                    extraHosts = lib.concatMap (h: "${h.ip} ${h.hostname}.${domain}") (lib.lists.remove host hosts);
                     staticIp = host.ip;
                     staticGateway = "192.168.2.254";
                   };

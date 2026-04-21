@@ -11,10 +11,6 @@
 
   myNixOS = {
     bundles.general-headless.enable = true;
-    sops = {
-      enable = true;
-      sshKeyDir = "sops";
-    };
   };
 
   nixpkgs = {

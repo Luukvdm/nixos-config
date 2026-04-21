@@ -14,7 +14,7 @@ in {
       generic-extlinux-compatible.enable = true;
     };
     consoleLogLevel = lib.mkDefault 7;
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.cross.linuxPackages_latest;
     kernelModules = [
       "nf_tables"
       "raid1"
@@ -38,7 +38,7 @@ in {
       {
         name = "configure_options";
         patch = null;
-        extraStructuredConfig = {
+        structuredExtraConfig = {
           CRYPTO_USER_API_HASH = module;
 
           # Enable nf_tables, required for the firewall and docker
