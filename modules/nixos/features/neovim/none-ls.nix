@@ -7,9 +7,7 @@
 in {
   options.myNixOS.neovim = {
     enableNoneLs = lib.mkOption {
-      # default = gocfg.enable;
-      default = false;
-      example = true;
+      default = true;
       description = "Whether to enable None-LS.";
       type = lib.types.bool;
     };

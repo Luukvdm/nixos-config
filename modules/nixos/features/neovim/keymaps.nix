@@ -1,9 +1,10 @@
 {
   pkgs,
+  lib,
   config,
   ...
 }: let
-  helpers = config.nixvim.helpers;
+  helpers = lib.nixvim;
 in {
   programs.nixvim = {
     keymaps = [

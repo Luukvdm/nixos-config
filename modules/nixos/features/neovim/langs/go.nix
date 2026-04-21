@@ -43,20 +43,20 @@ in {
 
   config = {
     programs.nixvim = {
-      extraPlugins = with pkgs.unstable.vimPlugins; [
-        go-nvim
-      ];
+      # extraPlugins = with pkgs.unstable.vimPlugins; [
+      #   go-nvim
+      # ];
 
-      extraConfigLua = "require('go').setup()";
+      # extraConfigLua = "require('go').setup()";
 
-      autoCmd = [
-        {
-          event = ["BufWritePre"];
-          pattern = ["*.go"];
-          callback = "require('go.format').goimports()";
-          # group = "format_sync_grp";
-        }
-      ];
+      # autoCmd = [
+      #   {
+      #     event = ["BufWritePre"];
+      #     pattern = ["*.go"];
+      #     callback = "require('go.format').goimports()";
+      #     # group = "format_sync_grp";
+      #   }
+      # ];
 
       plugins = {
         lsp = {

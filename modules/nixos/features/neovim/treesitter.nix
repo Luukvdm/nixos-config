@@ -20,26 +20,10 @@ in {
     plugins = {
       treesitter = {
         enable = cfg.enableTreesitter;
-        nixvimInjections = true;
-        # folding = true;
-
         settings = {
-          indent = {
-            enable = true;
-          };
-          ensureInstalled = [
-            "bash"
-            "css"
-            "dockerfile"
-            "go"
-            "gomod"
-            "html"
-            "javascript"
-            "markdown"
-            "python"
-            "vue"
-            "yaml"
-          ];
+          highlight.enable = true;
+          indent.enable = true;
+          folding.enable = true;
         };
       };
       # treesitter-context = {

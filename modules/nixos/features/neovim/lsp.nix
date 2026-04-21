@@ -22,24 +22,15 @@ in {
         enable = cfg.enableLsp;
         # onAttach
         servers = {
+          nixd.enable = true;
           bashls.enable = true;
           dockerls.enable = true;
-          golangci_lint_ls.enable = true;
-          gopls = {
-            enable = true;
-            extraOptions = {
-              analyses = {
-                unusedparams = true;
-                shadow = true;
-              };
-            };
-          };
           helm_ls.enable = true;
           jsonls.enable = true;
           marksman.enable = true;
           pylsp.enable = true;
           terraformls.enable = true;
-          volar = {
+          vue_ls = {
             enable = true;
             filetypes = ["typescript" "javascript" "javascriptreact" "typescriptreact" "vue"];
           };
