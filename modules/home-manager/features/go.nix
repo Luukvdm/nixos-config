@@ -5,6 +5,15 @@
   ...
 }: let
   cfg = config.myHomeManager.go;
+
+  # https://github.com/NixOS/nixpkgs/issues/509480
+  gotoolsWithoutModernize = pkgs.symlinkJoin {
+    name = "gotools-without-modernize";
+    paths = [pkgs.unstable.gotools];
+    postBuild = ''
+      rm -f "$out/bin/modernize"
+    '';
+  };
 in {
   options.myHomeManager.go = {
     package = lib.mkOption {
@@ -66,7 +75,8 @@ in {
       pkgs.unstable.goperf
       pkgs.unstable.gopls
       cfg.golangCiLintPackage
-      cfg.gotoolsPackage
+      # cfg.gotoolsPackage
+      gotoolsWithoutModernize
       cfg.gofumptPackage
       cfg.importsRevisorPackage
     ]

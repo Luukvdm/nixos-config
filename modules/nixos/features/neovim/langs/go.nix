@@ -59,6 +59,21 @@ in {
       ];
 
       plugins = {
+        lsp = {
+          servers = {
+            golangci_lint_ls.enable = true;
+            # currently broken, both gopls and gotools ship the modernize tool
+            # gopls = {
+            #   enable = true;
+            #   extraOptions = {
+            #     analyses = {
+            #       unusedparams = true;
+            #       shadow = true;
+            #     };
+            #   };
+            # };
+          };
+        };
         none-ls = {
           sources = {
             formatting = {
