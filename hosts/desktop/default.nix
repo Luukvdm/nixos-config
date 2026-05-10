@@ -31,6 +31,7 @@
     k8s-tools.enable = true;
     keychron.enable = true;
     docker.enable = true;
+    guitar.enable = true;
 
     userConfig = ./home.nix;
     user = {
@@ -58,9 +59,8 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-
-    # no need to redefine it in your config for now
-    #media-session.enable = true;
+    jack.enable = true;
+    wireplumber.enable = true;
   };
 
   # extra packages
