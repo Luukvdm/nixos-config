@@ -27,7 +27,7 @@ in rec {
           ({config, ...}: {
             nixpkgs = {
               hostPlatform = system;
-              buildPlatform = buildSystem;
+              # buildPlatform = buildSystem;
             };
           })
 

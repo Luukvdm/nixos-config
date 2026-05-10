@@ -31,8 +31,15 @@
       domain = lib.mkDefault "kube";
       staticIp = lib.mkDefault "192.168.2.9";
     };
+    k8s = {
+      caPem = pkgs.writeTextFile {
+        name = "ca.pem";
+        text = builtins.readFile ./certs/ca.pem;
+      };
+    };
     neovim = {
       enable = false;
+      neovimPackage = pkgs.cross.neovim-unwrapped;
       enableLsp = false;
       enableNoneLs = false;
       enableTreesitter = false;
@@ -61,7 +68,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    cross.neovim
+    # pkgs.cross.neovim-unwrapped
   ];
   security.sudo.wheelNeedsPassword = false;
 }

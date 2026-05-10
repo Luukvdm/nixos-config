@@ -30,6 +30,8 @@ in {
         auto-optimise-store = lib.mkDefault true;
         builders-use-substitutes = true;
         trusted-users = cfg.trustedUsers;
+        keep-outputs = true;
+        keep-derivations = true;
       };
       # channel.enable = lib.mkDefault false;
       optimise = {

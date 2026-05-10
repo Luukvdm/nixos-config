@@ -4,7 +4,7 @@
   ...
 }: {
   environment = {
-    systemPackages = with pkgs; [btop file jq tree wget curl dig whois];
+    systemPackages = with pkgs; [btop file jq tree wget curl dig whois openssl];
 
     # etc = {
     #   "flatpak/remotes.d/flathub.flatpakrepo".source = pkgs.fetchurl {

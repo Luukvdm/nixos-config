@@ -10,6 +10,13 @@
   cfg = config.myNixOS.sops;
 in {
   options.myNixOS.sops = {
+    enableSshKeyPaths = lib.mkOption {
+      type = with lib.types; bool;
+      default = true;
+      description = ''
+        If the sshKeyPaths option should be enabled.
+      '';
+    };
     sshKeyDir = lib.mkOption {
       type = with lib.types; str;
       default = "sops";
@@ -31,13 +38,12 @@ in {
   ];
 
   sops = {
-    defaultSopsFile = hostSecretsDir + /secrets.yaml;
+    # TODO
+    defaultSopsFile = "/home/${username}/code/github/nixos-config/secrets/secrets.yaml"; # hostSecretsDir + /secrets.yaml;
     defaultSopsFormat = "yaml";
 
     age = {
-      # sshKeyPaths = ["${config.home.homeDirectory}/.ssh/${cfg.sshKeyDir}/id_ed25519"];
-      sshKeyPaths = ["/home/${username}/.ssh/${cfg.sshKeyDir}/id_ed25519"];
-      # keyFile = "${config.xdg.configHome}/sops/age/keys.txt";
+      sshKeyPaths = lib.mkIf (cfg.enableSshKeyPaths) ["/home/${username}/.ssh/${cfg.sshKeyDir}/id_ed25519"];
       keyFile = "/home/${username}/.config/sops/age/keys.txt";
       generateKey = true;
     };

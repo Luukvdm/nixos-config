@@ -35,12 +35,9 @@ in {
       hostname = "turing-rk1";
       domain = "kube";
     };
-    neovim = {
-      enable = false;
-      enableLsp = false;
-      enableNoneLs = false;
-      enableTreesitter = false;
-      go.enable = false;
+    sops = {
+      enable = true;
+      enableSshKeyPaths = false;
     };
 
     user = {

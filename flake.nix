@@ -97,6 +97,7 @@
         name = "worker01";
         configName = "turing-rk1/k8s-worker";
         system = "aarch64-linux";
+        buildSystem = "aarch64-linux";
         hostname = "worker01";
         ip = "192.168.2.9";
         extraModules = [];
@@ -105,6 +106,7 @@
         name = "worker02";
         configName = "turing-rk1/k8s-worker";
         system = "aarch64-linux";
+        buildSystem = "aarch64-linux";
         hostname = "worker02";
         ip = "192.168.2.10";
         extraModules = [];
@@ -113,6 +115,7 @@
         name = "worker03";
         configName = "turing-rk1/k8s-worker";
         system = "aarch64-linux";
+        buildSystem = "aarch64-linux";
         hostname = "worker03";
         ip = "192.168.2.11";
         extraModules = [];
@@ -121,6 +124,7 @@
         name = "control01";
         configName = "turing-rk1/k8s-control";
         system = "aarch64-linux";
+        buildSystem = "aarch64-linux";
         hostname = "api";
         ip = kubeMasterIp;
         extraModules = [];
@@ -171,15 +175,15 @@
             hostname = host.ip;
             sshUser = "luuk";
             user = "root";
-            # autoRollback = false;
-            # magicRollback = false;
+            autoRollback = false;
+            magicRollback = false;
             # profiles.system.path = deploy-rs.lib.${host.system}.activate.nixos self.nixosConfigurations.${host.name};
             profiles.system.path = deployPkgs.${host.system}.deploy-rs.lib.activate.nixos self.nixosConfigurations.${host.name};
 
             activationTimeout = 600;
-            confirmTimeout = 60;
+            confirmTimeout = 120;
 
-            remoteBuild = true;
+            remoteBuild = false;
           };
         }
       ])
@@ -209,6 +213,8 @@
       stdenv = turingRk1Pkgs.stdenv;
       pkgs = turingRk1Pkgs;
     };
+    # set the cross compiled kernel for the turing rk1 compute modules as an output
+    packages.x86_64-linux.rk1-kernel = nixosConfigurations.turing-rk1-base.config.system.build.kernel;
 
     homeManagerModules.default = ./modules/home-manager;
     nixosModules.default = ./modules/nixos;
@@ -223,26 +229,64 @@
       };
     };
 
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+
     devShells = forAllSystems (system: let
       pkgs = import nixpkgs {inherit system;};
-      # writeJSONText = name: obj: pkgs.writeText "${name}.json" (builtins.toJSON obj);
-      # caCsr = writeJSONText "kubernetes-ca" (nixpkgs.lib.attrsets.recursiveUpdate {
-      #     key = {
-      #       algo = "rsa";
-      #       size = 2048;
-      #     };
-      #   } {
-      #     CN = "kubernetes-ca";
-      #     hosts = ["kubernetes-ca"] ++ [];
-      #     # names = [
-      #     #   {"O" = organization;}
-      #     # ];
-      #   });
-      # make-certs = pkgs.writeShellScriptBin "make-certs" ''
-      #   mkdir -p certs
-      #   ${pkgs.cfssl}/bin/cfssl gencert -loglevel 2 -initca "${caCsr}" | ${pkgs.cfssl}/bin/cfssljson -bare ca
-      #   mv ca-key.pem ca.csr ca.pem certs/
-      # '';
+      writeJSONText = name: obj: pkgs.writeText "${name}.json" (builtins.toJSON obj);
+      configBase = {
+        CN = "kubernetes-cluster-ca";
+        key = {
+          algo = "rsa";
+          size = 2048;
+        };
+        names = [
+          {
+            C = "NL";
+            ST = "Noord-Brabant";
+            L = "Etten-Leur";
+            # O = "<organization>";
+            # OU = "<organization unit>";
+          }
+        ];
+      };
+      caConfig = writeJSONText "ca-config" {
+        signing = {
+          default = {
+            expiry = "8760h"; # "168h";
+          };
+          profiles = {
+            kubernetes = {
+              usages = ["signing" "key encipherment" "server auth" "client auth"];
+              expiry = "8760h";
+            };
+          };
+        };
+      };
+      caCsr =
+        writeJSONText "ca-csr" (nixpkgs.lib.attrsets.recursiveUpdate configBase {
+          });
+      serverCsr = writeJSONText "server-csr" (nixpkgs.lib.attrsets.recursiveUpdate configBase {
+        hosts = [
+          "127.0.0.1"
+          kubeMasterIp
+          "kubernetes"
+          "kubernetes.default"
+          "kubernetes.default.svc"
+          "kubernetes.default.svc.cluster"
+          "kubernetes.default.svc.cluster.local"
+        ];
+      });
+      make-certs = pkgs.writeShellScriptBin "make-certs" ''
+        # https://kubernetes.io/docs/tasks/administer-cluster/certificates/#cfssl
+        mkdir -p certs
+        # ${pkgs.cfssl}/bin/cfssl print-defaults config > certs/config/config.json
+        # ${pkgs.cfssl}/bin/cfssl print-defaults csr > certs/config/csr.json
+        ${pkgs.cfssl}/bin/cfssl gencert -initca "${caCsr}" | ${pkgs.cfssl}/bin/cfssljson -bare ca
+        mv ca-key.pem ca.csr ca.pem certs/
+        # ${pkgs.cfssl}/bin/cfssl gencert -ca="certs/ca.pem" -ca-key="certs/ca-key.pem" -config="${caConfig}" -profile="kubernetes" ${serverCsr} | ${pkgs.cfssl}/bin/cfssljson -bare server
+        # mv server-key.pem server.csr server.pem certs/
+      '';
     in
       with pkgs; {
         default = pkgs.mkShellNoCC {
@@ -260,7 +304,8 @@
               age
               ssh-to-age
 
-              # make-certs
+              cfssl
+              make-certs
             ]
             ++ [
               inputs.deploy-rs.packages.${pkgs.stdenv.hostPlatform.system}.deploy-rs

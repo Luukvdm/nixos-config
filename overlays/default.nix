@@ -22,8 +22,10 @@
   };
   cross-packages = final: _prev: {
     cross = import inputs.nixpkgs {
-      system = final.stdenv.hostPlatform.system;
-      buildPlatform = final.stdenv.buildPlatform.system; # "x86_64-linux";
+      # system = final.stdenv.hostPlatform.system;
+      # buildPlatform = "x86_64-linux"; # final.stdenv.buildPlatform.system;
+      localSystem = "x86_64-linux"; # The machine doing the building
+      crossSystem = final.stdenv.hostPlatform.system; # The target architecture
       config = {
         allowUnfree = true;
         allowUnfreePredicate = pkg:

@@ -14,7 +14,10 @@ in {
       generic-extlinux-compatible.enable = true;
     };
     consoleLogLevel = lib.mkDefault 7;
-    kernelPackages = pkgs.cross.linuxPackages_latest;
+    kernelPackages = pkgs.cross.linuxPackagesFor (pkgs.cross.linuxPackages_latest.kernel.override {
+      # This tells the Nix builder to stop complaining about orphaned options
+      ignoreConfigErrors = true;
+    });
     kernelModules = [
       "nf_tables"
       "raid1"
@@ -34,6 +37,27 @@ in {
       {
         name = "rk3588-turing-rk1-fan-curve";
         patch = ./01_rk3588-turing-rk1-fan-curve.patch;
+      }
+      {
+        name = "trim-unnecessary-modules";
+        patch = null;
+        structuredExtraConfig = {
+          # Disable Sound
+          SOUND = no;
+          SND = no;
+
+          # Disable Bluetooth and Wireless
+          BT = no;
+          WLAN = no;
+          WIRELESS = no;
+
+          # Disable Graphics/Display drivers
+          DRM = lib.mkForce no;
+          AGP = no;
+
+          # Disable Media (Webcams, TV tuners)
+          MEDIA_SUPPORT = no;
+        };
       }
       {
         name = "configure_options";

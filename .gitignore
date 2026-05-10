@@ -3,3 +3,5 @@ result
 
 nixos.img
 uboot.img
+
+./certs/
