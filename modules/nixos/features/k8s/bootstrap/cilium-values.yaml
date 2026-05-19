@@ -1,0 +1,66 @@
+global:
+  cleanState: true
+  cleanBpfState: true
+
+cni:
+  binPath: /opt/cni/bin
+  confPath: /etc/cni/net.d
+
+# ipam:
+#   mode: kubernetes
+# securityContext:
+#   capabilities:
+#     ciliumAgent: [CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID]
+#     cleanCiliumState: [NET_ADMIN,SYS_ADMIN,SYS_RESOURCE]
+# cgroup:
+#   autoMount:
+#     enabled: false
+#   hostRoot: "/sys/fs/cgroup"
+
+l2announcements:
+  enabled: true
+  leaseDuration: 3s
+  leaseRenewDeadline: 1s
+  leaseRetryPeriod: 200ms
+
+kubeProxyReplacement: true
+
+# loadBalancer:
+#   acceleration: "native"
+#   protocolDifferentiation:
+#     enabled: true
+bpf:
+  lbExternalRouting: true
+#   masquerade: true
+#   # hostLegacyRouting: true # https://github.com/cilium/cilium/issues/32489
+# # gatewayAPI:
+# #   enabled: true
+# #   enableAlpn: true
+# #   enableAppProtocol: true
+
+ingressController:
+  enabled: true
+  default: true
+  loadbalancerMode: dedicated
+  enforceHttps: false
+  service:
+    annotations:
+      "io.cilium/lb-ipam-ips": "192.168.2.128"
+
+# bgpControlPlane:
+#   enabled: true
+
+k8sClientRateLimit:
+  # https://docs.cilium.io/en/latest/network/l2-announcements/#sizing-client-rate-limit
+  qps: 32
+  burst: 50
+
+hubble:
+  enabled: false
+  relay:
+    enabled: false
+  # metrics:
+  #   enabled: "{dns:query;ignoreAAAA,drop,tcp,flow,icmp,http}"
+  #   enableOpenMetrics: true
+  ui:
+    enabled: false

@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: home
+  namespace: argocd
+spec:
+  sourceRepos:
+    - "git@github.com/Luukvdm/*"
+    # - "https://helm.cilium.io"
+    - "https://kubernetes-sigs.github.io/metrics-server"
+    - "https://kubernetes-sigs.github.io/external-dns"
+    - "https://prometheus-community.github.io/helm-charts"
+    - "https://mojo2600.github.io/pihole-kubernetes"
+    - "registry-1.docker.io/bitnamicharts"
+    - "https://openebs.github.io/openebs"
+    - "oci://quay.io/jetstack/charts/cert-manager"
+    - "https://openebs.github.io/openebs"
+    - "https://itzg.github.io/minecraft-server-charts"
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - name: in-cluster
+    namespace: '*'
+    server: https://kubernetes.default.svc

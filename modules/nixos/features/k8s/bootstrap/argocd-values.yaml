@@ -1,0 +1,14 @@
+fullnameOverride: "argocd"
+namespaceOverride: argocd
+global:
+  domain: argocd.local
+  logging:
+    format: text # or json
+configs:
+  params:
+    server.insecure: true
+    admin.enabled: true
+server:
+  ingress:
+    enabled: true
+    ingressClassName: cilium

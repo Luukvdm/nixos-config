@@ -32,6 +32,8 @@
       staticIp = lib.mkDefault "192.168.2.9";
     };
     k8s = {
+      enableNode = true;
+      enableFlannel = false;
       caPem = pkgs.writeTextFile {
         name = "ca.pem";
         text = builtins.readFile ./certs/ca.pem;
@@ -68,7 +70,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # pkgs.cross.neovim-unwrapped
+    neovim-unwrapped
   ];
   security.sudo.wheelNeedsPassword = false;
 }

@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   ...
 }: let
@@ -8,174 +9,228 @@
   etcdEndpoints = ["https://${cfg.kubeMasterHostname}:2379"];
   apiAddr = "https://${cfg.kubeMasterHostname}:${toString cfg.kubeMasterApiServerPort}";
 in {
-  services.kubernetes = {
-    masterAddress = cfg.kubeMasterHostname;
-    apiserverAddress = apiAddr;
+  config = lib.mkIf cfg.enableNode {
+    security.pki.certificateFiles = [cfg.caPem];
 
-    easyCerts = false;
-    # on the worker node kube-certmgr-bootstrap.service populates the file
-    caFile =
-      if cfg.role == "control"
-      then cfg.caPem
-      else "${config.services.kubernetes.secretsPath}/ca.pem";
-    pki = {
-      enable = true;
-      genCfsslCACert = false;
-      genCfsslAPICerts = cfg.role == "control";
-      genCfsslAPIToken = false;
-      # fetches the CA from cfssl and outputs it in kubernetes.caFile
-      pkiTrustOnBootstrap = false; # cfg.role == "worker";
-      caCertPathPrefix =
+    services.certmgr.specs.kubelet.request.hosts = [
+      config.services.kubernetes.kubelet.hostname
+      cfg.hostIp
+    ];
+
+    services.kubernetes = {
+      masterAddress = cfg.kubeMasterHostname;
+      apiserverAddress = apiAddr;
+
+      easyCerts = false;
+      # on the worker node kube-certmgr-bootstrap.service populates the file
+      caFile =
         if cfg.role == "control"
-        then "${config.services.cfssl.dataDir}/ca"
-        else "";
-    };
-
-    kubelet = {
-      enable = true;
-      unschedulable = false;
-      clientCaFile = cfg.caPem;
-      # unschedulable = cfg.role == "control";
-      # taints = {
-      #   master = lib.mkIf (cfg.role == "control") {
-      #     key = "node-role.kubernetes.io/master";
-      #     value = "true";
-      #     effect = "NoSchedule";
-      #   };
-      # };
-      kubeconfig = {
-        server = apiAddr;
-      };
-    };
-
-    apiserver = lib.mkIf (cfg.role == "control") {
-      enable = true;
-
-      securePort = cfg.kubeMasterApiServerPort;
-      # uses the bind-address by default
-      advertiseAddress = cfg.kubeMasterIp;
-    };
-
-    scheduler = lib.mkIf (cfg.role == "control") {
-      enable = true;
-    };
-    controllerManager = lib.mkIf (cfg.role == "control") {
-      enable = true;
-    };
-    addonManager = lib.mkIf (cfg.role == "control") {
-      enable = true;
-    };
-    addons = {
-      dns = {
+        then cfg.caPem
+        else "${config.services.kubernetes.secretsPath}/ca.pem";
+      pki = {
         enable = true;
-        coredns = {
-          finalImageTag = "1.10.1";
-          imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
-          imageName = "coredns/coredns";
-          sha256 = "0c4vdbklgjrzi6qc5020dvi8x3mayq4li09rrq2w0hcjdljj0yf9";
+        genCfsslCACert = false;
+        genCfsslAPICerts = cfg.role == "control";
+        genCfsslAPIToken = false;
+        # fetches the CA from cfssl and outputs it in kubernetes.caFile
+        pkiTrustOnBootstrap = false; # cfg.role == "worker";
+        caCertPathPrefix =
+          if cfg.role == "control"
+          then "${config.services.cfssl.dataDir}/ca"
+          else "";
+        # certs.kubelet.hosts = [
+        #   cfg.hostIp
+        #   "test"
+        # ];
+      };
+
+      kubelet = {
+        enable = true;
+        unschedulable = false;
+        clientCaFile = cfg.caPem;
+        # unschedulable = cfg.role == "control";
+        # taints = {
+        #   master = lib.mkIf (cfg.role == "control") {
+        #     key = "node-role.kubernetes.io/master";
+        #     value = "true";
+        #     effect = "NoSchedule";
+        #   };
+        # };
+        kubeconfig = {
+          server = apiAddr;
         };
       };
+
+      apiserver = lib.mkIf (cfg.role == "control") {
+        enable = true;
+
+        securePort = cfg.kubeMasterApiServerPort;
+        # uses the bind-address by default
+        advertiseAddress = cfg.kubeMasterIp;
+
+        allowPrivileged = true;
+
+        # configure Kubernetes aggregation layer
+        extraOpts = ''
+          --requestheader-client-ca-file=${config.services.kubernetes.secretsPath}/ca.pem \
+          --requestheader-allowed-names=front-proxy-client,kube-apiserver-proxy-client \
+          --requestheader-extra-headers-prefix=X-Remote-Extra- \
+          --requestheader-group-headers=X-Remote-Group \
+          --requestheader-username-headers=X-Remote-User \
+          --proxy-client-cert-file=${config.services.kubernetes.secretsPath}/kube-apiserver-proxy-client.pem \
+          --proxy-client-key-file=${config.services.kubernetes.secretsPath}/kube-apiserver-proxy-client-key.pem
+        '';
+      };
+
+      scheduler = lib.mkIf (cfg.role == "control") {
+        enable = true;
+      };
+      controllerManager = lib.mkIf (cfg.role == "control") {
+        enable = true;
+      };
+      addonManager = lib.mkIf (cfg.role == "control") {
+        enable = true;
+      };
+      addons = {
+        dns = {
+          enable = true;
+          corefile = lib.mkIf (config.myNixOS.networkd.enable) ''
+            .:10053 {
+              errors
+              health :10054
+              kubernetes ${config.services.kubernetes.addons.dns.clusterDomain} in-addr.arpa ip6.arpa {
+                pods insecure
+                fallthrough in-addr.arpa ip6.arpa
+              }
+              prometheus :10055
+              forward . ${builtins.concatStringsSep " " config.myNixOS.networkd.dns}
+              cache 30
+              loop
+              reload
+              loadbalance
+            }
+          '';
+          coredns = {
+            finalImageTag = "1.10.1";
+            imageDigest = "sha256:a0ead06651cf580044aeb0a0feba63591858fb2e43ade8c9dea45a6a89ae7e5e";
+            imageName = "coredns/coredns";
+            sha256 = "0c4vdbklgjrzi6qc5020dvi8x3mayq4li09rrq2w0hcjdljj0yf9";
+          };
+        };
+      };
+      proxy = {
+        enable = false;
+      };
+      flannel = {
+        enable = cfg.enableFlannel;
+      };
+
+      clusterCidr = "10.200.0.0/16"; # the default value
     };
-    proxy = {
+
+    sops.secrets =
+      if cfg.role == "control"
+      then {
+        "cfssl-ca-pem" = {
+          sopsFile = ../../../../secrets/k8s/ca.pem;
+          format = "binary";
+          path = "${config.services.cfssl.dataDir}/ca.pem";
+
+          owner = "cfssl";
+          group = "cfssl";
+          mode = "0444";
+        };
+        "cfssl-ca-key-pem" = {
+          sopsFile = ../../../../secrets/k8s/ca-key.pem;
+          format = "binary";
+          path = "${config.services.cfssl.dataDir}/ca-key.pem";
+
+          owner = "cfssl";
+          group = "cfssl";
+          mode = "0440";
+        };
+        "cfssl-ca-csr" = {
+          sopsFile = ../../../../secrets/k8s/ca.csr;
+          format = "binary";
+          path = "${config.services.cfssl.dataDir}/ca.csr";
+
+          owner = "cfssl";
+          group = "cfssl";
+          mode = "0440";
+        };
+        "cfssl-apitoken-secret" = {
+          sopsFile = ../../../../secrets/k8s/apitoken.secret;
+          format = "binary";
+          path = "${config.services.cfssl.dataDir}/apitoken.secret";
+
+          owner = "cfssl";
+          group = "cfssl";
+          mode = "0440";
+        };
+        "kubernetes-ca-pem" = {
+          sopsFile = ../../../../secrets/k8s/ca.pem;
+          format = "binary";
+          path = "${config.services.kubernetes.secretsPath}/ca.pem";
+
+          owner = "kubernetes";
+          group = "kubernetes";
+          mode = "0444";
+        };
+        "kubernetes-ca-key-pem" = {
+          sopsFile = ../../../../secrets/k8s/ca-key.pem;
+          format = "binary";
+          path = "${config.services.kubernetes.secretsPath}/ca-key.pem";
+
+          owner = "kubernetes";
+          group = "kubernetes";
+          mode = "0440";
+        };
+        "kubernetes-ca-csr" = {
+          sopsFile = ../../../../secrets/k8s/ca.csr;
+          format = "binary";
+          path = "${config.services.kubernetes.secretsPath}/ca.csr";
+
+          owner = "kubernetes";
+          group = "kubernetes";
+          mode = "0440";
+        };
+      }
+      else {
+        "kubernetes-apitoken-secret" = {
+          sopsFile = ../../../../secrets/k8s/apitoken.secret;
+          format = "binary";
+          path = "${config.services.kubernetes.secretsPath}/apitoken.secret";
+
+          owner = "kubernetes";
+          group = "kubernetes";
+          mode = "0440";
+        };
+      };
+
+    system.activationScripts.setupCustomCni = lib.mkIf (cfg.cniBinPath != "/opt/cni/bin/") ''
+      mkdir -p ${cfg.cniBinPath}
+      ln -fs ${pkgs.cni-plugins}/bin/* ${cfg.cniBinPath}
+    '';
+    virtualisation.containerd.settings = {
+      version = 2;
+      plugins."io.containerd.grpc.v1.cri".cni = {
+        bin_dir = cfg.cniBinPath;
+        conf_dir = "/etc/cni/net.d";
+      };
+    };
+
+    # systemd.services.etcd = {
+    #   environment = {
+    #     ETCD_UNSUPPORTED_ARCH = "arm64";
+    #   };
+    # };
+    services.etcd = lib.mkIf (cfg.role == "control") {
       enable = true;
     };
-    flannel = {
-      enable = true;
-    };
-
-    clusterCidr = "10.200.0.0/16"; # the default value
-  };
-
-  sops.secrets =
-    if cfg.role == "control"
-    then {
-      "cfssl-ca-pem" = {
-        sopsFile = ../../../../secrets/k8s/ca.pem;
-        format = "binary";
-        path = "${config.services.cfssl.dataDir}/ca.pem";
-
-        owner = "cfssl";
-        group = "cfssl";
-        mode = "0444";
+    services.flannel = {
+      etcd = {
+        endpoints = etcdEndpoints;
       };
-      "cfssl-ca-key-pem" = {
-        sopsFile = ../../../../secrets/k8s/ca-key.pem;
-        format = "binary";
-        path = "${config.services.cfssl.dataDir}/ca-key.pem";
-
-        owner = "cfssl";
-        group = "cfssl";
-        mode = "0440";
-      };
-      "cfssl-ca-csr" = {
-        sopsFile = ../../../../secrets/k8s/ca.csr;
-        format = "binary";
-        path = "${config.services.cfssl.dataDir}/ca.csr";
-
-        owner = "cfssl";
-        group = "cfssl";
-        mode = "0440";
-      };
-      "cfssl-apitoken-secret" = {
-        sopsFile = ../../../../secrets/k8s/apitoken.secret;
-        format = "binary";
-        path = "${config.services.cfssl.dataDir}/apitoken.secret";
-
-        owner = "cfssl";
-        group = "cfssl";
-        mode = "0440";
-      };
-      "kubernetes-ca-pem" = {
-        sopsFile = ../../../../secrets/k8s/ca.pem;
-        format = "binary";
-        path = "${config.services.kubernetes.secretsPath}/ca.pem";
-
-        owner = "kubernetes";
-        group = "kubernetes";
-        mode = "0444";
-      };
-      "kubernetes-ca-key-pem" = {
-        sopsFile = ../../../../secrets/k8s/ca-key.pem;
-        format = "binary";
-        path = "${config.services.kubernetes.secretsPath}/ca-key.pem";
-
-        owner = "kubernetes";
-        group = "kubernetes";
-        mode = "0440";
-      };
-      "kubernetes-ca-csr" = {
-        sopsFile = ../../../../secrets/k8s/ca.csr;
-        format = "binary";
-        path = "${config.services.kubernetes.secretsPath}/ca.csr";
-
-        owner = "kubernetes";
-        group = "kubernetes";
-        mode = "0440";
-      };
-    }
-    else {
-      "kubernetes-apitoken-secret" = {
-        sopsFile = ../../../../secrets/k8s/apitoken.secret;
-        format = "binary";
-        path = "${config.services.kubernetes.secretsPath}/apitoken.secret";
-
-        owner = "kubernetes";
-        group = "kubernetes";
-        mode = "0440";
-      };
-    };
-
-  # systemd.services.etcd = {
-  #   environment = {
-  #     ETCD_UNSUPPORTED_ARCH = "arm64";
-  #   };
-  # };
-  services.etcd = lib.mkIf (cfg.role == "control") {
-    enable = true;
-  };
-  services.flannel = {
-    etcd = {
-      endpoints = etcdEndpoints;
     };
   };
 }

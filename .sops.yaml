@@ -16,7 +16,7 @@ creation_rules:
     key_groups:
       - age:
           - *work
-  - path_regex: secrets/k8s/[^/]+\.*$
+  - path_regex: secrets/k8s/.*$
     key_groups:
       - age:
           - *desktop

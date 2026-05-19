@@ -11,6 +11,7 @@
     k8s = {
       enable = true;
       role = "control";
+      enableBootstrap = true;
     };
     sops = {
       secrets = {
