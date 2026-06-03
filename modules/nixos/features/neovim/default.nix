@@ -7,6 +7,8 @@
 }: let
   cfg = config.myNixOS.neovim;
 in {
+  # If something breaks, consider clearing the cache
+  # > rm -rf ~/.local/share/nvim/ && rm -rf ~/.cache/nvim/
   imports = [
     inputs.nixvim.nixosModules.nixvim
 
@@ -17,7 +19,7 @@ in {
     ./none-ls.nix
     ./treesitter.nix
 
-    ./langs/go.nix
+    # ./langs/go.nix
   ];
 
   programs.nixvim = {
@@ -46,7 +48,17 @@ in {
       wrap = false;
       background = "dark";
 
+      spell = true;
+      # or set is manually `:set spell spelllang=nl_nl`
+      spelllang = "en_us,nl";
+
       completeopt = ["menu" "menuone" "noselect"]; # For CMP plugin
+    };
+
+    diagnostic.settings = {
+      severity_sort = true;
+      update_in_insert = true;
+      signs = false;
     };
 
     clipboard = {
@@ -59,9 +71,15 @@ in {
     };
 
     plugins = {
-      direnv = {
+      nix = {
         enable = true;
       };
+      #   nix-develop = {
+      #     enable = true;
+      #   };
+      #   direnv = {
+      #     enable = true;
+      #   };
       gitsigns = {
         enable = true;
       };
@@ -74,12 +92,6 @@ in {
         settings = {
           auto_reload_on_write = true;
         };
-      };
-      nix = {
-        enable = true;
-      };
-      nix-develop = {
-        enable = true;
       };
     };
 

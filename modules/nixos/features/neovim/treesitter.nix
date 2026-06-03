@@ -25,10 +25,60 @@ in {
           indent.enable = true;
           folding.enable = true;
         };
+
+        grammarPackages = with config.programs.nixvim.plugins.treesitter.package.builtGrammars; [
+          awk
+          bash
+          # c_sharp
+          css
+          csv
+          desktop
+          dockerfile
+          editorconfig
+          git_config
+          git_rebase
+          gitattributes
+          gitcommit
+          gitignore
+          go
+          gomod
+          gosum
+          gotmpl
+          gowork
+          helm
+          html
+          # htmldjango
+          http
+          java
+          javascript
+          jq
+          json
+          make
+          markdown
+          markdown_inline
+          pem
+          properties
+          proto
+          python
+          regex
+          rego
+          # rust
+          sql
+          ssh_config
+          terraform
+          toml
+          typescript
+          vue
+          yaml
+          zsh
+        ];
       };
-      # treesitter-context = {
-      # enable = true;
-      # };
+      treesitter-context = {
+        enable = true;
+        settings = {
+          enable = true;
+        };
+      };
     };
   };
 }
