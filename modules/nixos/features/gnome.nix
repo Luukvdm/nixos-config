@@ -93,7 +93,6 @@ in {
       };
       gdm = {
         enable = true;
-        wayland = true;
         /*
         autoLogin = {
           delay = 1;

@@ -4,7 +4,18 @@
   lib,
   username,
   ...
-}: {
+}: let
+  cfg = config.myHomeManager.zsh;
+in {
+  options.myHomeManager.zsh = {
+    sessionVariables = lib.mkOption {
+      type = lib.types.attrs;
+      default = {};
+      description = ''
+      '';
+    };
+  };
+
   home.packages = with pkgs; [
     powerline
     powerline-symbols
@@ -49,8 +60,7 @@
       }
       compctl -K _dotnet_zsh_complete dotnet
     '';
-    sessionVariables = {
-    };
+    sessionVariables = cfg.sessionVariables;
     envExtra = ''
       # export DEFAULT_USER=$\{username};
       export PATH="$XDG_DATA_HOME/JetBrains/Toolbox/scripts:$XDG_DATA_HOME/go/bin:$XDG_CONFIG_HOME/dotnet/.dotnet/tools:$PATH";
