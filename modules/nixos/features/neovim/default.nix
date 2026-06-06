@@ -24,6 +24,13 @@ in {
 
   programs.nixvim = {
     enable = true;
+
+    nixpkgs = {
+      config = {
+        allowUnfree = true;
+      };
+    };
+
     colorschemes.gruvbox.enable = true;
     globals.mapleader = "\\";
 
