@@ -16,7 +16,7 @@ in {
     };
   };
 
-  config.programs.nixvim = {
+  config.programs.nixvim = lib.mkIf cfg.enableLsp {
     plugins = {
       lsp = {
         enable = cfg.enableLsp;

@@ -16,7 +16,7 @@ in {
     };
   };
 
-  config.programs.nixvim = {
+  config.programs.nixvim = lib.mkIf cfg.enableTreesitter {
     plugins = {
       treesitter = {
         enable = cfg.enableTreesitter;

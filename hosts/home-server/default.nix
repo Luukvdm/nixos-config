@@ -33,7 +33,7 @@
       enableLsp = false;
       enableNoneLs = false;
       enableTreesitter = false;
-      go.enable = false;
+      # go.enable = false;
     };
     # k8s-tools = {
     #   enable = false;
