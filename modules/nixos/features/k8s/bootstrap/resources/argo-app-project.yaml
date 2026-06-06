@@ -16,6 +16,10 @@ spec:
     - "oci://quay.io/jetstack/charts/cert-manager"
     - "https://openebs.github.io/openebs"
     - "https://itzg.github.io/minecraft-server-charts"
+    - "oci://ghcr.io/prometheus-community/charts/prometheus"
+    - "oci://ghcr.io/grafana-community/helm-charts/loki"
+    - "https://open-telemetry.github.io/opentelemetry-helm-charts"
+    - "oci://ghcr.io/grafana-community/helm-charts/grafana"
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'

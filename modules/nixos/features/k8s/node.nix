@@ -12,10 +12,35 @@ in {
   config = lib.mkIf cfg.enableNode {
     security.pki.certificateFiles = [cfg.caPem];
 
-    services.certmgr.specs.kubelet.request.hosts = [
-      config.services.kubernetes.kubelet.hostname
-      cfg.hostIp
-    ];
+    # https://github.com/NixOS/nixpkgs/issues/434442
+    services.certmgr.specs = lib.mkForce (
+      let
+        mkSpec = _: cert: {
+          inherit (cert) action;
+          authority = {
+            remote = "https://${config.services.kubernetes.masterAddress}:${toString config.services.cfssl.port}";
+            root_ca = cert.caCert;
+            profile = "default";
+            auth_key_file = "${config.services.kubernetes.secretsPath}/apitoken.secret";
+          };
+          certificate = {
+            path = cert.cert;
+          };
+          private_key = cert.privateKeyOptions;
+          request = {
+            # NOTE: This is the only change from upstream
+            hosts = [(lib.replaceString ":" "-" cert.CN)] ++ cert.hosts ++ lib.optional (cert.name == "kubelet") cfg.hostIp;
+            inherit (cert) CN;
+            key = {
+              algo = "rsa";
+              size = 2048;
+            };
+            names = [cert.fields];
+          };
+        };
+      in
+        lib.mapAttrs mkSpec config.services.kubernetes.pki.certs
+    );
 
     services.kubernetes = {
       masterAddress = cfg.kubeMasterHostname;
@@ -38,10 +63,6 @@ in {
           if cfg.role == "control"
           then "${config.services.cfssl.dataDir}/ca"
           else "";
-        # certs.kubelet.hosts = [
-        #   cfg.hostIp
-        #   "test"
-        # ];
       };
 
       kubelet = {
@@ -213,11 +234,6 @@ in {
       };
     };
 
-    # systemd.services.etcd = {
-    #   environment = {
-    #     ETCD_UNSUPPORTED_ARCH = "arm64";
-    #   };
-    # };
     services.etcd = lib.mkIf (cfg.role == "control") {
       enable = true;
     };

@@ -13,6 +13,9 @@ spec:
     targetRevision: main
     path: app-of-apps
     helm:
+      valueFiles:
+      - values.yaml
+      - values-infra.yaml
       valuesObject:
         project: home
   syncPolicy:
