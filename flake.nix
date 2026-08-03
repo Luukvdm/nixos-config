@@ -126,6 +126,15 @@
         ip = kubeMasterIp;
         extraModules = [];
       }
+      {
+        name = "home-server";
+        configName = "home-server";
+        system = "x86_64-linux";
+        buildSystem = "x86_64-linux";
+        hostname = "home-server";
+        ip = "192.168.2.16";
+        extraModules = [];
+      }
     ];
   in rec {
     # packages = forAllSystems (pkgs: import ./pkgs {inherit pkgs;});
@@ -145,12 +154,6 @@
         {
           name = "work";
           value = myLib.mkSystem "work" {
-            system = "x86_64-linux";
-          };
-        }
-        {
-          name = "home-server";
-          value = myLib.mkSystem "home-server" {
             system = "x86_64-linux";
           };
         }
@@ -186,22 +189,22 @@
       ])
       k8s-hosts
       ++ [
-        {
-          name = "home-server";
-          value = {
-            hostname = "192.168.2.13";
-            sshUser = "luuk";
-            user = "root";
-            # autoRollback = false;
-            # magicRollback = false;
-            profiles = {
-              system.path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.home-server;
-            };
+        # {
+        #   name = "home-server";
+        #   value = {
+        #     hostname = "192.168.2.16";
+        #     sshUser = "luuk";
+        #     user = "root";
+        #     autoRollback = false;
+        #     magicRollback = false;
+        #     profiles = {
+        #       system.path = deployPkgs.x86_64-linux.deploy-rs.lib.activate.nixos self.nixosConfigurations.home-server;
+        #     };
 
-            activationTimeout = 600;
-            confirmTimeout = 60;
-          };
-        }
+        #     activationTimeout = 600;
+        #     confirmTimeout = 60;
+        #   };
+        # }
       ]);
 
     images.turing-rk1 = nixosConfigurations.turing-rk1-base.config.system.build.sdImage;

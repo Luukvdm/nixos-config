@@ -143,6 +143,10 @@ in {
       clusterCidr = "10.200.0.0/16"; # the default value
     };
 
+    # systemd.services.kubelet.preStart = ''
+    #   chown -R kubernetes:kubernetes ${config.services.kubernetes.secretsPath}
+    # '';
+
     sops.secrets =
       if cfg.role == "control"
       then {
@@ -220,6 +224,15 @@ in {
           group = "kubernetes";
           mode = "0440";
         };
+        "kubernetes-ca-pem" = {
+          sopsFile = ../../../../secrets/k8s/ca.pem;
+          format = "binary";
+          path = "${config.services.kubernetes.secretsPath}/ca.pem";
+
+          owner = "kubernetes";
+          group = "kubernetes";
+          mode = "0444";
+        };
       };
 
     system.activationScripts.setupCustomCni = lib.mkIf (cfg.cniBinPath != "/opt/cni/bin/") ''
@@ -228,9 +241,18 @@ in {
     '';
     virtualisation.containerd.settings = {
       version = 2;
+      disabled_plugins = ["io.containerd.snapshotter.v1.zfs"];
       plugins."io.containerd.grpc.v1.cri".cni = {
         bin_dir = cfg.cniBinPath;
         conf_dir = "/etc/cni/net.d";
+      };
+
+      plugins."io.containerd.grpc.v1.cri".containerd = {
+        snapshotter = "overlayfs";
+      };
+
+      plugins."io.containerd.cri.v1.images" = {
+        snapshotter = "overlayfs";
       };
     };
 

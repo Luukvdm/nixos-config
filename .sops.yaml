@@ -1,11 +1,11 @@
 keys:
-  # - &thinkpad age17sv6eash2cv2ljt57pzg5gua74zr9lks3nyggsp32n628malj96surg2h3
   - &work age1s2wumhh0hcsgvppfx0awla06rsycvgassyqt0ynajtagmmmjfshstfausp
   - &desktop age15tpxdvpenwrklugejlmc4tzwhphytyjmqq74esrjnkmfpsnxldwsud63fh
   - &worker01 age1m3wzrk4q8zc2234l8hra9892dz8ngm04k0624lfd88sk8703ffpsgkknzu
   - &worker02 age15r9lurdpyer83qg4qc5kc9zap0qs37y867skgwakhmu22kp2dses9pzus4
   - &worker03 age1xfge7ravvzf9d4wg50p6254uflj4w89lwxktg2ndk7rwdy3gp5vq6tr3sn
   - &control01 age167vldfklwtl879gwvn3xx2schlvekdt2d8cl6gmuex0evupadffqjvvsp8
+  - &server01 age13f5l4xkyrrk7t8652qfhr65tsqteq66wwy4jp6cvjgta79hqx49saj0pqq
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
@@ -24,3 +24,4 @@ creation_rules:
           - *worker02
           - *worker03
           - *control01
+          - *server01

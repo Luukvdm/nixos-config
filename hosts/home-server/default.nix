@@ -15,18 +15,26 @@
   myNixOS = {
     bundles.general-headless.enable = true;
     sops = {
-      enable = false;
+      enable = true;
+      enableSshKeyPaths = false;
     };
     networking = {
       enable = true;
-      hostname = "home-server";
+      enableNftables = true;
     };
     networkd = {
       enable = true;
-      hostname = "home-server";
-      staticIp = "192.168.2.13";
-      interface = "enp8s0";
-      staticGateway = "192.168.2.254";
+      interface = "enp36s0f0";
+    };
+    k8s = {
+      enable = true;
+      enableNode = true;
+      enableFlannel = false;
+      caPem = pkgs.writeTextFile {
+        name = "ca.pem";
+        text = builtins.readFile ./certs/ca.pem;
+      };
+      role = "worker";
     };
     neovim = {
       enable = true;
@@ -45,6 +53,7 @@
       shell = pkgs.bash;
     };
   };
+  security.sudo.wheelNeedsPassword = false;
 
   users.users."${username}" = {
     openssh.authorizedKeys.keys = [
@@ -61,6 +70,4 @@
       efi.canTouchEfiVariables = true;
     };
   };
-
-  security.sudo.wheelNeedsPassword = false;
 }
