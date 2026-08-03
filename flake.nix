@@ -14,6 +14,11 @@
       url = "github:nixos/nixos-hardware/master";
     };
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.1.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -149,6 +154,7 @@
           name = "desktop";
           value = myLib.mkSystem "desktop" {
             system = "x86_64-linux";
+            # extraModules = [lanzaboote.nixosModules.lanzaboote];
           };
         }
         {

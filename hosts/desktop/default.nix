@@ -15,6 +15,7 @@
   myNixOS = {
     bundles.general-desktop.enable = true;
     bundles.home-manager.enable = true;
+    lanzaboote.enable = true;
     power-management.enable = false;
     sops = {
       enable = true;
