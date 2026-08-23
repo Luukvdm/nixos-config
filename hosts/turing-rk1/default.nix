@@ -38,6 +38,10 @@
         name = "ca.pem";
         text = builtins.readFile ./certs/ca.pem;
       };
+      nodeLabels = {
+        "openebs.io/engine" = "mayastor";
+        "storage-tier" = "nvme";
+      };
     };
     neovim = {
       enable = false;

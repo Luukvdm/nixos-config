@@ -27,6 +27,12 @@ in {
       type = with lib.types; bool;
       default = false;
     };
+    nodeLabels = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = {};
+      description = "Key-value pairs of labels to apply to the Kubernetes node via Kubelet.";
+      example = {"openebs.io/engine" = "mayastor";};
+    };
 
     kubeMasterIp = lib.mkOption {
       type = with lib.types; str;

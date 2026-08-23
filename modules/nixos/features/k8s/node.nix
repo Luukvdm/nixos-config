@@ -80,6 +80,13 @@ in {
         kubeconfig = {
           server = apiAddr;
         };
+        extraOpts = lib.mkIf (cfg.nodeLabels != {}) (
+          let
+            labelsString = lib.concatStringsSep "," (
+              lib.mapAttrsToList (name: value: "${name}=${value}") cfg.nodeLabels
+            );
+          in "--node-labels=${labelsString}"
+        );
       };
 
       apiserver = lib.mkIf (cfg.role == "control") {
