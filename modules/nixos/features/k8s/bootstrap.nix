@@ -71,8 +71,8 @@ in {
         format = "binary";
       };
       "rauthy-env" = {
-        sopsFile = ../../../../secrets/k8s/rauthy.env;
-        format = "binary";
+        sopsFile = ../../../../secrets/k8s/rauthy-env;
+        format = "dotenv";
       };
     };
 
@@ -148,7 +148,7 @@ in {
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
         ${pkgs.kubectl}/bin/kubectl create secret generic rauthy-config --namespace rauthy \
-          --from-env-file <(tr -d '\n' < ${config.sops.secrets."rauthy-env".path}) \
+          --from-env-file=${config.sops.secrets."rauthy-env".path} \
           --overwrite=true
 
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${appOfApps}
