@@ -31,7 +31,7 @@ in {
     supportedFilesystems = ["zfs"];
     initrd = {
       availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod"];
-      kernelModules = [];
+      kernelModules = ["amdgpu"];
     };
     zfs = {
       extraPools = ["media-pool" "backup-pool"];
@@ -60,9 +60,19 @@ in {
     fsType = "zfs";
   };
 
-  swapDevices = [
-    # {device = "/dev/disk/by-uuid/b7086f2d-25ce-4349-8d03-1e4a29515f48";}
-  ];
+  swapDevices = lib.mkForce [];
+  # swapDevices = [
+  #   {device = "/dev/disk/by-uuid/b7086f2d-25ce-4349-8d03-1e4a29515f48";}
+  # ];
+
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      libva-vdpau-driver
+      libvdpau-va-gl
+    ];
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
