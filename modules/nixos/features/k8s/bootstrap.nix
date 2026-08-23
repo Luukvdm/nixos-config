@@ -70,6 +70,10 @@ in {
         sopsFile = ../../../../secrets/k8s/gh-deploy/id_ed25519;
         format = "binary";
       };
+      "rauthy-env" = {
+        sopsFile = ../../../../secrets/k8s/rauthy.env;
+        format = "binary";
+      };
     };
 
     # cilium config
@@ -142,6 +146,10 @@ in {
           --namespace dns \
           --from-file=password=<(tr -d '\n' < ${config.sops.secrets."pihole-password".path}) \
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
+
+        ${pkgs.kubectl}/bin/kubectl create secret generic rauthy-config --namespace rauthy \
+          --from-env-file <(tr -d '\n' < ${config.sops.secrets."rauthy-env".path}) \
+          --overwrite=true
 
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${appOfApps}
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${argocdAppProject}
