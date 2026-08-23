@@ -20,6 +20,7 @@ spec:
     - "oci://ghcr.io/grafana-community/helm-charts/loki"
     - "https://open-telemetry.github.io/opentelemetry-helm-charts"
     - "oci://ghcr.io/grafana-community/helm-charts/grafana"
+    - "https://jellyfin.github.io/jellyfin-helm"
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
