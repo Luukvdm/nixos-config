@@ -26,7 +26,17 @@ in {
 
   boot = {
     kernelPackages = latestKernelPackage;
-    kernelModules = ["kvm-amd"];
+    kernel = {
+      sysctl = {
+        "vm.nr_hugepages" = 1024;
+      };
+    };
+    kernelModules = ["kvm-amd" "nvme-tcp"];
+    kernelParams = [
+      "default_hugepagesz=2M"
+      "hugepagesz=2M"
+      "hugepages=1024"
+    ];
     extraModulePackages = [];
     supportedFilesystems = ["zfs"];
     initrd = {

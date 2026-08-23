@@ -18,12 +18,18 @@ in {
       # This tells the Nix builder to stop complaining about orphaned options
       ignoreConfigErrors = true;
     });
+    kernel = {
+      sysctl = {
+        "vm.nr_hugepages" = 1024;
+      };
+    };
     kernelModules = [
       "nf_tables"
       "raid1"
       "vxlan"
       "iscsi_tcp"
       "cifs"
+      "nvme-tcp"
     ];
     kernelParams = [
       "root=UUID=${rootPartitionUUID}"
@@ -32,6 +38,9 @@ in {
       #   "console=ttyAMA0,115200n8"
       "loglevel=7"
       "console=tty0"
+      "default_hugepagesz=2M"
+      "hugepagesz=2M"
+      "hugepages=1024"
     ];
     kernelPatches = with lib.kernel; [
       {
