@@ -15,7 +15,7 @@ spec:
     helm:
       valueFiles:
       - values.yaml
-      - values-infra.yaml
+      - values-base.yaml
       valuesObject:
         project: home
   syncPolicy:
