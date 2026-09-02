@@ -37,7 +37,9 @@ in {
   users.users."${cfg.user}" = {
     packages = with pkgs; [
       azure-cli
+      aws-iam-authenticator
       awscli2
+      eksctl
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [
         gke-gcloud-auth-plugin
         gcloud-man-pages
