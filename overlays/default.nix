@@ -10,6 +10,27 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+
+    vscode-extensions =
+      prev.vscode-extensions
+      // {
+        vscjava =
+          prev.vscode-extensions.vscjava
+          // {
+            # On activation, 0.59.0 mkdirs .noConfigDebugAdapterEndpoints inside its
+            # own extension directory, which fails on a read-only store path. That
+            # takes vscode-java-test down with it (hard extensionDependency), so no
+            # tests are discovered. Upstream skips the mkdir when the directory
+            # already exists, so pre-create it. Costs only no-config debugging.
+            vscode-java-debug = prev.vscode-extensions.vscjava.vscode-java-debug.overrideAttrs (old: {
+              postInstall =
+                (old.postInstall or "")
+                + ''
+                  mkdir -p "$out/$installPrefix/.noConfigDebugAdapterEndpoints"
+                '';
+            });
+          };
+      };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
