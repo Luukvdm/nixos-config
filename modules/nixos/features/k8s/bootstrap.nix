@@ -56,7 +56,7 @@ in {
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     sops.secrets = {
       "pihole-password" = {
         sopsFile = ../../../../secrets/k8s/pihole-password;

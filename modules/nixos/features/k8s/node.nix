@@ -9,7 +9,7 @@
   etcdEndpoints = ["https://${cfg.kubeMasterHostname}:2379"];
   apiAddr = "https://${cfg.kubeMasterHostname}:${toString cfg.kubeMasterApiServerPort}";
 in {
-  config = lib.mkIf cfg.enableNode {
+  config = lib.mkIf (cfg.enable && cfg.enableNode) {
     security.pki.certificateFiles = [cfg.caPem];
 
     # https://github.com/NixOS/nixpkgs/issues/434442
