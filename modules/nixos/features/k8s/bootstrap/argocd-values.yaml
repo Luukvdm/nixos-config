@@ -1,17 +1,45 @@
 fullnameOverride: "argocd"
 namespaceOverride: argocd
 global:
-  domain: argocd.local
+  domain: argocd.luukvdm.dev
   logging:
     format: text # or json
 configs:
   params:
     server.insecure: true
-    admin.enabled: true
+  cm:
+    admin.enabled: "false"
+    dex.config: |
+      connectors:
+        - type: oidc
+          id: rauthy
+          name: Rauthy
+          config:
+            issuer: https://auth.luukvdm.dev/auth/v1/
+            clientID: argocd
+            clientSecret: $oidc.rauthy.clientSecret
+            insecureEnableGroups: true
+            userNameKey: email
+            scopes:
+              - openid
+              - profile
+              - email
+              - groups
 server:
+  rbacConfig:
+    policy.default: role:readonly
+    policy.csv: |
+      g, argocd-admins, role:admin
   ingress:
     enabled: true
-    ingressClassName: cilium
+    ingressClassName: "cilium"
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-luukvdm-dev"
+      ingress.cilium.io/loadbalancer-mode: "shared"
+    extraTls:
+      - hosts:
+        - argocd.luukvdm.dev
+        secretName: argocd-tls
 controller:
   metrics:
     enabled: true

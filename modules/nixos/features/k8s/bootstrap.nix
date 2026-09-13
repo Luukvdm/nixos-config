@@ -70,6 +70,10 @@ in {
         sopsFile = ../../../../secrets/k8s/gh-deploy/id_ed25519;
         format = "binary";
       };
+      "rauthy-argocd" = {
+        sopsFile = ../../../../secrets/k8s/rauthy-argocd;
+        format = "binary";
+      };
       "rauthy-env" = {
         sopsFile = ../../../../secrets/k8s/rauthy-env;
         format = "dotenv";
@@ -138,6 +142,18 @@ in {
           --namespace=${cfg.bootstrap.argocd.namespace} \
           --create-namespace --wait
 
+        timeout=60
+        while ! ${pkgs.kubectl}/bin/kubectl get secret argocd-secret --namespace ${cfg.bootstrap.argocd.namespace} >/dev/null 2>&1; do
+          timeout=$((timeout - 1))
+          if [ $timeout -eq 0 ]; then
+            echo "Timeout waiting for argocd-secret"
+            exit 1
+          fi
+          sleep 1
+        done
+        ${pkgs.kubectl}/bin/kubectl patch secret argocd-secret --namespace ${cfg.bootstrap.argocd.namespace} \
+          -p "{\"stringData\": {\"oidc.rauthy.clientSecret\": \"$(tr -d '\n' < ${config.sops.secrets."rauthy-argocd".path})\"}}"
+
         ${pkgs.kubectl}/bin/kubectl create secret generic github-repo-infra \
           --namespace argocd \
           --from-literal=name=github-luukvdm-infra \
@@ -155,9 +171,10 @@ in {
           --from-file=password=<(tr -d '\n' < ${config.sops.secrets."pihole-password".path}) \
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
-        ${pkgs.kubectl}/bin/kubectl create secret generic rauthy-config --namespace rauthy \
+        ${pkgs.kubectl}/bin/kubectl create secret generic rauthy-config \
+          --namespace rauthy \
           --from-env-file=${config.sops.secrets."rauthy-env".path} \
-          --overwrite=true
+          --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${appOfApps}
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${argocdAppProject}
