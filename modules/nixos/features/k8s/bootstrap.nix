@@ -37,7 +37,7 @@ in {
       };
       version = lib.mkOption {
         type = with lib.types; str;
-        default = "1.19.4";
+        default = "1.21.0-pre.2";
       };
       namespace = lib.mkOption {
         type = with lib.types; str;
@@ -111,16 +111,24 @@ in {
       };
       after = ["kubelet.service"];
       script = ''
-        ${pkgs.kubernetes-helm}/bin/helm repo add cilium https://helm.cilium.io/
+        # ${pkgs.kubernetes-helm}/bin/helm repo add cilium https://helm.cilium.io/
+        ${pkgs.kubernetes-helm}/bin/helm repo update
+
+
+        ${pkgs.kubectl}/bin/kubectl create namespace ${cfg.bootstrap.cilium.namespace} --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply -f -
+        ${pkgs.kubectl}/bin/kubectl label namespace ${cfg.bootstrap.cilium.namespace} \
+          pod-security.kubernetes.io/enforce=privileged \
+          pod-security.kubernetes.io/audit=privileged \
+          pod-security.kubernetes.io/warn=privileged \
+          --overwrite
         ${pkgs.kubernetes-helm}/bin/helm upgrade \
-          -i cilium cilium/cilium \
+          -i cilium oci://quay.io/cilium/charts/cilium \
           --version ${cfg.bootstrap.cilium.version} \
           -f ${ciliumValues} \
           --set k8sServiceHost=${cfg.kubeMasterIp} \
           --set k8sServicePort=${toString cfg.kubeMasterApiServerPort} \
           --set cni.binPath=${cfg.cniBinPath} \
-          --namespace=${cfg.bootstrap.cilium.namespace} \
-          --create-namespace
+          --namespace=${cfg.bootstrap.cilium.namespace}
         ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f ${ciliumResources}
 
         ${pkgs.kubernetes-helm}/bin/helm upgrade \
