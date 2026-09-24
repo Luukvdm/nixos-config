@@ -31,7 +31,7 @@ server:
     policy.csv: |
       g, argocd-admins, role:admin
   ingress:
-    enabled: true
+    enabled: false
     ingressClassName: "cilium"
     annotations:
       cert-manager.io/cluster-issuer: "letsencrypt-luukvdm-dev"
@@ -40,6 +40,11 @@ server:
       - hosts:
         - argocd.luukvdm.dev
         secretName: argocd-tls
+  httproute:
+    enabled: true
+    parentRefs:
+      - name: cilium-gateway
+        namespace: kube-system
 controller:
   metrics:
     enabled: true
