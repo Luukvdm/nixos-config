@@ -70,6 +70,10 @@ in {
         sopsFile = ../../../../secrets/k8s/gh-deploy/id_ed25519;
         format = "binary";
       };
+      "dns-api-token" = {
+        sopsFile = ../../../../secrets/k8s/dns-api-token;
+        format = "binary";
+      };
       "rauthy-argocd" = {
         sopsFile = ../../../../secrets/k8s/rauthy-argocd;
         format = "binary";
@@ -119,6 +123,9 @@ in {
         echo "updating helm repos"
         ${pkgs.kubernetes-helm}/bin/helm repo update
 
+        echo "Installing Gateway API CRDS"
+        ${pkgs.kubectl}/bin/kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+
         echo "installing/ upgrading Cilium"
         ${pkgs.kubectl}/bin/kubectl create namespace ${cfg.bootstrap.cilium.namespace} --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply -f -
         ${pkgs.kubectl}/bin/kubectl label namespace ${cfg.bootstrap.cilium.namespace} \
@@ -134,7 +141,7 @@ in {
           --set k8sServicePort=${toString cfg.kubeMasterApiServerPort} \
           --set cni.binPath=${cfg.cniBinPath} \
           --namespace=${cfg.bootstrap.cilium.namespace}
-        ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f ${ciliumResources}
+        ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts --namespace=${cfg.bootstrap.cilium.namespace} -f ${ciliumResources}
 
         ${pkgs.kubernetes-helm}/bin/helm upgrade \
           -i argocd oci://ghcr.io/argoproj/argo-helm/argo-cd \
@@ -155,6 +162,12 @@ in {
         done
         ${pkgs.kubectl}/bin/kubectl patch secret argocd-secret --namespace ${cfg.bootstrap.argocd.namespace} \
           -p "{\"stringData\": {\"oidc.rauthy.clientSecret\": \"$(tr -d '\n' < ${config.sops.secrets."rauthy-argocd".path})\"}}"
+
+        echo "applying DNS API secret"
+        ${pkgs.kubectl}/bin/kubectl create secret generic dns-api-token \
+          --namespace cert-manager \
+          --from-file=api-token=<(tr -d '\n' < ${config.sops.secrets."dns-api-token".path}) \
+          --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
         echo "applying github-repo-infra secret"
         ${pkgs.kubectl}/bin/kubectl create secret generic github-repo-infra \

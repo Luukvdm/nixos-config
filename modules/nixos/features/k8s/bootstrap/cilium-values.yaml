@@ -33,10 +33,11 @@ bpf:
   lbExternalRouting: true
 #   masquerade: true
 #   # hostLegacyRouting: true # https://github.com/cilium/cilium/issues/32489
-# # gatewayAPI:
-# #   enabled: true
-# #   enableAlpn: true
-# #   enableAppProtocol: true
+
+gatewayAPI:
+  enabled: true
+#   enableAlpn: true
+#   enableAppProtocol: true
 
 ingressController:
   enabled: true
