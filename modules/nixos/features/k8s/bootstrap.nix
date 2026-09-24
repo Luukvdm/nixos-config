@@ -116,9 +116,10 @@ in {
       after = ["kubelet.service"];
       script = ''
         # ${pkgs.kubernetes-helm}/bin/helm repo add cilium https://helm.cilium.io/
+        echo "updating helm repos"
         ${pkgs.kubernetes-helm}/bin/helm repo update
 
-
+        echo "installing/ upgrading Cilium"
         ${pkgs.kubectl}/bin/kubectl create namespace ${cfg.bootstrap.cilium.namespace} --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply -f -
         ${pkgs.kubectl}/bin/kubectl label namespace ${cfg.bootstrap.cilium.namespace} \
           pod-security.kubernetes.io/enforce=privileged \
@@ -142,6 +143,7 @@ in {
           --namespace=${cfg.bootstrap.argocd.namespace} \
           --create-namespace --wait
 
+        echo "patching argocd-secret secret with oidc.rauthy.clientSecret"
         timeout=60
         while ! ${pkgs.kubectl}/bin/kubectl get secret argocd-secret --namespace ${cfg.bootstrap.argocd.namespace} >/dev/null 2>&1; do
           timeout=$((timeout - 1))
@@ -154,23 +156,27 @@ in {
         ${pkgs.kubectl}/bin/kubectl patch secret argocd-secret --namespace ${cfg.bootstrap.argocd.namespace} \
           -p "{\"stringData\": {\"oidc.rauthy.clientSecret\": \"$(tr -d '\n' < ${config.sops.secrets."rauthy-argocd".path})\"}}"
 
+        echo "applying github-repo-infra secret"
         ${pkgs.kubectl}/bin/kubectl create secret generic github-repo-infra \
           --namespace argocd \
           --from-literal=name=github-luukvdm-infra \
           --from-literal=project=home \
           --from-literal=type=git \
           --from-literal=url=git@github.com:Luukvdm/infra.git \
-          --from-file=sshPrivateKey=<(tr -d '\n' < ${config.sops.secrets."deploy-key".path}) \
+          --from-file=sshPrivateKey=${config.sops.secrets."deploy-key".path} \
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
+        echo "labeling github-repo-infra secret"
         ${pkgs.kubectl}/bin/kubectl label secrets github-repo-infra \
           --namespace argocd \
           argocd.argoproj.io/secret-type=repository --overwrite=true
 
+        echo "applying pihole secret"
         ${pkgs.kubectl}/bin/kubectl create secret generic pihole \
           --namespace dns \
           --from-file=password=<(tr -d '\n' < ${config.sops.secrets."pihole-password".path}) \
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
+        echo "applying rauthy-config secret"
         ${pkgs.kubectl}/bin/kubectl create secret generic rauthy-config \
           --namespace rauthy \
           --from-env-file=${config.sops.secrets."rauthy-env".path} \
