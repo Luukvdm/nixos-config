@@ -21,6 +21,7 @@ spec:
     - "https://open-telemetry.github.io/opentelemetry-helm-charts"
     - "oci://ghcr.io/grafana-community/helm-charts/grafana"
     - "https://jellyfin.github.io/jellyfin-helm"
+    - "https://oauth2-proxy.github.io/manifests"
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'

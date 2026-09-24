@@ -78,6 +78,10 @@ in {
         sopsFile = ../../../../secrets/k8s/rauthy-argocd;
         format = "binary";
       };
+      "oauth-proxy-env" = {
+        sopsFile = ../../../../secrets/k8s/oauth-proxy-env;
+        format = "dotenv";
+      };
       "rauthy-env" = {
         sopsFile = ../../../../secrets/k8s/rauthy-env;
         format = "dotenv";
@@ -193,6 +197,12 @@ in {
         ${pkgs.kubectl}/bin/kubectl create secret generic rauthy-config \
           --namespace rauthy \
           --from-env-file=${config.sops.secrets."rauthy-env".path} \
+          --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
+
+        echo "applying oauth2-proxy secret with rauthy client variables"
+        ${pkgs.kubectl}/bin/kubectl create secret generic oauth2-rauthy-config \
+          --namespace oauthproxy \
+          --from-env-file=${config.sops.secrets."oauth-proxy-env".path} \
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${appOfApps}
