@@ -128,7 +128,7 @@ in {
         ${pkgs.kubernetes-helm}/bin/helm repo update
 
         echo "Installing Gateway API CRDS"
-        ${pkgs.kubectl}/bin/kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/standard-install.yaml
+        ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.1/experimental-install.yaml
 
         echo "installing/ upgrading Cilium"
         ${pkgs.kubectl}/bin/kubectl create namespace ${cfg.bootstrap.cilium.namespace} --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply -f -
