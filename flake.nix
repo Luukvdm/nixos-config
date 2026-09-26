@@ -165,7 +165,7 @@
         }
         {
           name = "turing-rk1-base";
-          value = myLib.mkSystem "turing-rk1/base" {
+          value = myLib.mkSystem "turing-rk1" {
             system = "aarch64-linux";
             # nixos/modules/installer/sd-card/sd-image-aarch64.nix
             extraModules = ["${nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix"];
