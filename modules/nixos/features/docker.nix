@@ -23,13 +23,23 @@ in {
     autoPrune = {
       enable = cfg.autoPrune;
     };
+    daemon = {
+      settings = {
+        default-address-pools = [
+          {
+            base = "172.30.0.0/16";
+            size = 24;
+          }
+        ];
+      };
+    };
   };
 
   environment = {
     shellAliases = {
-      docker = "docker ";
-      d = "docker ";
-      dc = "docker-compose ";
+      docker = "docker";
+      d = "docker";
+      dc = "docker-compose";
     };
 
     sessionVariables = {
