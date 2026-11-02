@@ -2,6 +2,7 @@
   inputs,
   outputs,
   lib,
+  modulesPath,
   config,
   pkgs,
   username,
@@ -12,6 +13,9 @@ in {
   imports = [
     outputs.nixosModules.default
     ./hardware.nix
+
+    (modulesPath + "/installer/sd-card/sd-image-aarch64.nix")
+    (modulesPath + "/image/file-options.nix")
   ];
 
   myNixOS = {
@@ -33,7 +37,6 @@ in {
       hostname = lib.mkDefault "turing-rk1";
       domain = lib.mkDefault "kube";
       # staticIp = lib.mkDefault "192.168.2.9";
-      staticIp = "";
     };
     k8s = {
       enableNode = true;

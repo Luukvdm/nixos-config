@@ -14,7 +14,7 @@ in {
       generic-extlinux-compatible.enable = true;
     };
     consoleLogLevel = lib.mkDefault 7;
-    kernelPackages = pkgs.cross.linuxPackagesFor (pkgs.cross.linuxPackages_latest.kernel.override {
+    kernelPackages = pkgs.cross.linuxPackagesFor (pkgs.cross.linuxPackages.kernel.override {
       # This tells the Nix builder to stop complaining about orphaned options
       ignoreConfigErrors = true;
     });
@@ -164,7 +164,7 @@ in {
       "btrfs"
     ];
     initrd.includeDefaultModules = false;
-    initrd.availableKernelModules = [
+    initrd.availableKernelModules = lib.mkForce [
       "nvme"
       "mmc_block"
     ];
