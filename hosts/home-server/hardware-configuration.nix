@@ -33,6 +33,7 @@ in {
     };
     kernelModules = ["kvm-amd" "nvme-tcp"];
     kernelParams = [
+      "systemd.gpt_auto=0"
       "default_hugepagesz=2M"
       "hugepagesz=2M"
       "hugepages=1024"
