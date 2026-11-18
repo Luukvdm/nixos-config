@@ -206,7 +206,7 @@ in {
           --dry-run=client -o yaml | ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f -
 
         ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${appOfApps}
-        ${pkgs.kubectl}/bin/kubectl apply --server-side -f ${argocdAppProject}
+        ${pkgs.kubectl}/bin/kubectl apply --server-side --force-conflicts -f ${argocdAppProject}
       '';
       serviceConfig = {
         # Slice = "kubernetes.slice";

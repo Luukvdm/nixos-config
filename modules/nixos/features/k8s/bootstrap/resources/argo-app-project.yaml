@@ -22,6 +22,8 @@ spec:
     - "oci://ghcr.io/grafana-community/helm-charts/grafana"
     - "https://jellyfin.github.io/jellyfin-helm"
     - "https://oauth2-proxy.github.io/manifests"
+    - "https://github.com/squat/generic-device-plugin"
+    - "oci://ghcr.io/pajikos/charts/home-assistant"
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
